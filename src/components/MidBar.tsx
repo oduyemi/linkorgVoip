@@ -7,7 +7,7 @@ export const MidBar: React.FC = () => {
       bg="white"
       py={3}
       px={{ base: 4, xl: 5 }}
-      display={{ base: "flex", lg: "flex" }} 
+      display={{ base: "none", lg: "flex" }} 
     >
       {/* Logo Section */}
       <Box width="33.33%"> 
