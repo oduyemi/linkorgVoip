@@ -146,15 +146,12 @@
   }
   
   a {
-    color: #FFD333;
+    color: #FFF;
     text-decoration: none;
     background-color: transparent;
   }
   
-  a:hover {
-    color: #e6b400;
-    text-decoration: underline;
-  }
+
   
   a:not([href]):not([class]) {
     color: inherit;
