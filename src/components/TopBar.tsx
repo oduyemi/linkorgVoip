@@ -26,8 +26,8 @@ export const TopBar: React.FC = () => {
                 My Account
               </MenuButton>
               <MenuList>
-                <MenuItem>Login</MenuItem>
-                <MenuItem>Register</MenuItem>
+                <MenuItem><a href="/login">Login</a></MenuItem>
+                <MenuItem><a href="/register">Register</a></MenuItem>
               </MenuList>
             </Menu>
 

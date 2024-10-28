@@ -13,6 +13,8 @@ import ThePackages from "./pages/ThePackages";
 import About from "./pages/About";
 import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 
 
 
@@ -29,6 +31,8 @@ const App: React.FC = () => {
                     <Route path="/faqs" element={<FAQ />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/packages" element={<ThePackages />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                     <Route path="/shop" element={<GeneralShop />} />
                     <Route path="/yealink" element={<YealinkStore />} />
                     <Route path="/grandstream" element={<GrandstreamStore />} />

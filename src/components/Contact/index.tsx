@@ -48,7 +48,7 @@ export const ContactUs: React.FC = () => {
 
               <FormControl id="email" isRequired mt={5}>
                 <FormLabel color="gray.800">Email</FormLabel>
-                <Input type="email" placeholder="youremail@domain.com" />
+                <Input type="email" placeholder="johndoe@gmail.com" />
               </FormControl>
 
               <FormControl id="subject" isRequired mt={5}>

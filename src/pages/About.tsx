@@ -5,6 +5,7 @@ import { Footer } from "../components/Footer";
 import { AdBox } from "../components/Home/AdBox";
 import { AboutIntro } from "../components/About/Intro";
 import { CoreValues } from "../components/About/CoreValues";
+import { FeaturedProducts } from "../components/Home/FeaturedProducts";
 
 
 
@@ -16,6 +17,7 @@ const About: React.FC = () => {
             <AboutBanner />
             <AboutIntro />
             <CoreValues />
+            <FeaturedProducts />
             <AdBox backgroundImage={require("../assets/images/voip.jpg")} />
             <Footer />
         </Box>
