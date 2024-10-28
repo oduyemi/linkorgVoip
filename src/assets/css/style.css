@@ -4,8 +4,8 @@
     --purple: #6f42c1;
     --pink: #e83e8c;
     --red: #dc3545;
-    --orange: #fd7e14;
-    --yellow: #ffc107;
+    --orange: #e65d0f;
+    --yellow: #e65d0f;
     --green: #28a745;
     --teal: #20c997;
     --cyan: #17a2b8;
@@ -16,7 +16,7 @@
     --secondary: #F5F5F5;
     --success: #28a745;
     --info: #17a2b8;
-    --warning: #ffc107;
+    --warning: #e65d0f;
     --danger: #dc3545;
     --light: #FFFFFF;
     --dark: #3D464D;
@@ -4350,6 +4350,10 @@
   
   .navbar-dark .navbar-text a:hover, .navbar-dark .navbar-text a:focus {
     color: #fff;
+  }
+
+  a:hover{
+    color: #e65d0f;
   }
   
   .card {

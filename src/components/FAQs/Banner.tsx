@@ -27,10 +27,12 @@ export const FAQBanner: React.FC = () => {
         <Container maxW="container.md" centerContent>
           <Flex align="center" justify="center" direction="column" textAlign="center" zIndex={1}>
             <Heading as="h1" color="white" fontSize="4xl" textTransform="uppercase" fontWeight="bold" mb={3}>
-              VoIP Hardware from the best brands
+              We've got it all
             </Heading>
             <Text color="white" fontSize="xl" mb={5}>
-            Best VoIP Hardware, Cloud based Business Voip phone system from Linkorg. Simple and easy to set up and cheap to run with over 40 features included.
+                We've got everything you need to build 
+                your phone system - from desk and wireless 
+                phones to headsets and curly cords.
             </Text>
             <Button
               as="a"

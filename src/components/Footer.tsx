@@ -27,7 +27,7 @@ export const Footer: React.FC = () => {
               <GridItem>
                 <VStack align="start" spacing={6}>
                   <Box>
-                    <Heading size="md" fontWeight="bold">
+                    <Heading size="md" fontWeight="bold" className='blutext'>
                       About
                     </Heading>
                     <Text>
@@ -40,19 +40,19 @@ export const Footer: React.FC = () => {
                     </Heading>
                     <HStack spacing={4}>
                       <Link href="#" aria-label="Facebook" isExternal>
-                        <Icon as={FaFacebookF} boxSize={6} _hover={{ color: 'blue.400' }} />
+                        <Icon as={FaFacebookF} boxSize={6} _hover={{ color: 'orange.600' }} />
                       </Link>
                       <Link href="#" aria-label="Twitter" isExternal>
-                        <Icon as={FaTwitter} boxSize={6} _hover={{ color: 'blue.400' }} />
+                        <Icon as={FaTwitter} boxSize={6} _hover={{ color: 'orange.600' }} />
                       </Link>
                       <Link href="#" aria-label="Instagram" isExternal>
-                        <Icon as={FaInstagram} boxSize={6} _hover={{ color: 'blue.400' }} />
+                        <Icon as={FaInstagram} boxSize={6} _hover={{ color: 'orange.600' }} />
                       </Link>
                       <Link href="#" aria-label="Dribbble" isExternal>
-                        <Icon as={FaDribbble} boxSize={6} _hover={{ color: 'blue.400' }} />
+                        <Icon as={FaDribbble} boxSize={6} _hover={{ color: 'orange.600' }} />
                       </Link>
                       <Link href="#" aria-label="LinkedIn" isExternal>
-                        <Icon as={FaLinkedin} boxSize={6} _hover={{ color: 'blue.400' }} />
+                        <Icon as={FaLinkedin} boxSize={6} _hover={{ color: 'orange.600' }} />
                       </Link>
                     </HStack>
                   </Box>
@@ -62,29 +62,26 @@ export const Footer: React.FC = () => {
               <GridItem>
                 <Grid templateColumns={{ base: '1fr', md: 'repeat(3, 1fr)' }} gap={6}>
                   <GridItem>
-                    <Heading size="md" fontWeight="bold">
+                    <Heading size="md" fontWeight="bold" className='blutext'>
                       Quick Links
                     </Heading>
                   </GridItem>
                   <GridItem>
                     <VStack align="start" spacing={2} style={{ marginTop: "20%" }}>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>Home</Link>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>Services</Link>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>About Us</Link>
+                      <Link href="/" _hover={{ color: 'orange.600' }}>Home</Link>
+                      <Link href="/about" _hover={{ color: 'orange.600' }}>About Us</Link>
                     </VStack>
                   </GridItem>
                   <GridItem>
                     <VStack align="start" spacing={2} style={{ marginTop: "20%" }}>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>Packages</Link>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>Support</Link>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>Contact</Link>
+                      <Link href="packages" _hover={{ color: 'orange.600' }}>Packages</Link>
+                      <Link href="/contact" _hover={{ color: 'orange.600' }}>Contact</Link>
                     </VStack>
                   </GridItem>
                   <GridItem>
-                    <VStack align="start" spacing={2} style={{ marginTop: "-76%" }}>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>Shop</Link>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>Privacy Policy</Link>
-                      <Link href="#" _hover={{ color: 'blue.400' }}>Terms & Conditions</Link>
+                    <VStack align="start" spacing={2} style={{ marginTop: "-50%" }}>
+                      <Link href="/shop" _hover={{ color: 'orange.600' }}>Shop</Link>
+                      <Link href="#" _hover={{ color: 'orange.600' }}>Privacy Policy</Link>
                     </VStack>
                   </GridItem>
                 </Grid>

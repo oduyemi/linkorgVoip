@@ -1,13 +1,13 @@
 import { Box, Container, Flex, Heading, Text, Button } from "@chakra-ui/react";
 import React from "react";
-import contactHero from "../../assets/images/contactHero.jpg";
+import packagesHero from "../../assets/images/packagesHero.jpg";
 
 
-export const ContactBanner: React.FC = () => {
+export const PackagesBanner: React.FC = () => {
   return (
     <Box
         id="section-home"
-        bgImage={contactHero}
+        bgImage={packagesHero}
         bgSize="cover"
         bgPosition="center"
         bgAttachment="fixed"
@@ -27,11 +27,10 @@ export const ContactBanner: React.FC = () => {
         <Container maxW="container.md" centerContent>
           <Flex align="center" justify="center" direction="column" textAlign="center" zIndex={1}>
             <Heading as="h1" color="white" fontSize="4xl" textTransform="uppercase" fontWeight="bold" mb={3}>
-              Best VoIP Phones for business
+              VoIP Hardware from the best brands
             </Heading>
             <Text color="white" fontSize="xl" mb={5}>
-              Buy best VoIP phones for your business and elevate 
-              your business communication with Linkorg VoIP Phones.
+            Best VoIP Hardware, Cloud based Business Voip phone system from Linkorg. Simple and easy to set up and cheap to run with over 40 features included.
             </Text>
             <Button
               as="a"
