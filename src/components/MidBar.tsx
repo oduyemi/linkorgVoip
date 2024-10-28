@@ -7,17 +7,17 @@ export const MidBar: React.FC = () => {
       bg="white"
       py={3}
       px={{ base: 4, xl: 5 }}
-      display={{ base: "none", lg: "flex" }} 
+      display={{ base: "flex", lg: "flex" }} 
     >
       {/* Logo Section */}
-      <Box width="33.33%"> 
+      <Box width="33.33%" className="d-md-block d-none"> 
         <Link href="/" textDecoration="none">
           <img src={require("../assets/images/logo/logo_whitebg.png")} width="35%" alt="sitelogo" />
         </Link>
       </Box>
 
       {/* Search Bar */}
-      <Box width="33.33%" textAlign="left">
+      <Box width="33.33%" className="shift" textAlign="left">
         <FormControl>
           <InputGroup>
             <Input

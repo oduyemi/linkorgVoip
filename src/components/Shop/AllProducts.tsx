@@ -93,22 +93,23 @@ const products = [
 ];
 
 export const AllProducts: React.FC = () => {
-  const columns = useBreakpointValue({ base: 2, md: 3, lg: 4 });
+  const columns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 });
+  const iconSize = useBreakpointValue({ base: "xs", md: "sm" });
 
   return (
     <Box p={4}>
       <Flex mb={4} justifyContent="space-between" alignItems="center">
         <Flex>
-          <IconButton aria-label="Grid view" icon={<FaThLarge />} variant="outline" size="sm" />
-          <IconButton aria-label="List view" icon={<FaBars />} variant="outline" size="sm" ml={2} />
+          <IconButton aria-label="Grid view" icon={<FaThLarge />} variant="outline" size={iconSize} />
+          <IconButton aria-label="List view" icon={<FaBars />} variant="outline" size={iconSize} ml={2} />
         </Flex>
         <Flex>
-          <Button size="sm" variant="outline" mr={2}>Sorting</Button>
-          <Button size="sm" variant="outline">Showing</Button>
+          <Button size={iconSize} variant="outline" mr={2}>Sorting</Button>
+          <Button size={iconSize} variant="outline">Showing</Button>
         </Flex>
       </Flex>
 
-      <Grid templateColumns={`repeat(${columns}, 1fr)`} gap={6}>
+      <Grid templateColumns={`repeat(${columns}, 1fr)`} gap={4}>
         {products.map((product) => (
           <Box 
             key={product.id} 
@@ -134,16 +135,16 @@ export const AllProducts: React.FC = () => {
               gap={2}
             >
               <Tooltip label="Add to Cart" aria-label="Add to Cart">
-                <IconButton aria-label="Add to Cart" icon={<FaShoppingCart />} variant="outline" size="sm" />
+                <IconButton aria-label="Add to Cart" icon={<FaShoppingCart />} variant="outline" size={iconSize} />
               </Tooltip>
               <Tooltip label="Add to Wishlist" aria-label="Add to Wishlist">
-                <IconButton aria-label="Add to Wishlist" icon={<FaHeart />} variant="outline" colorScheme="red" size="sm" />
+                <IconButton aria-label="Add to Wishlist" icon={<FaHeart />} variant="outline" colorScheme="red" size={iconSize} />
               </Tooltip>
               <Tooltip label="Compare" aria-label="Compare">
-                <IconButton aria-label="Compare" icon={<FaSyncAlt />} variant="outline" size="sm" />
+                <IconButton aria-label="Compare" icon={<FaSyncAlt />} variant="outline" size={iconSize} />
               </Tooltip>
               <Tooltip label="View Details" aria-label="View Details">
-                <IconButton aria-label="View Details" icon={<FaSearch />} variant="outline" size="sm" />
+                <IconButton aria-label="View Details" icon={<FaSearch />} variant="outline" size={iconSize} />
               </Tooltip>
             </Flex>
 

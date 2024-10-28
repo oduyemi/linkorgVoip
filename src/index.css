@@ -20,4 +20,11 @@
 
 .my-fade-in {
     animation-duration: 60s;
+}
+
+@media (max-width: 768px) {
+    .shift {
+      width: 84% !important;
+    }
   }
+  
