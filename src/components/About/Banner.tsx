@@ -30,7 +30,7 @@ export const AboutBanner: React.FC = () => {
               VoIP Hardware from the best brands
             </Heading>
             <Text color="white" fontSize="xl" mb={5}>
-            Best VoIP Hardware, Cloud based Business Voip phone system from The VoIP Shop simple and easy to set up and cheap to run with over 40 features included.
+            Best VoIP Hardware, Cloud based Business Voip phone system from Linkorg. Simple and easy to set up and cheap to run with over 40 features included.
             </Text>
             <Button
               as="a"
