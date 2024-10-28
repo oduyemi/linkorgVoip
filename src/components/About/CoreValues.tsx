@@ -1,4 +1,4 @@
-import { Box, Container, Flex, Heading, Text, VStack, List, ListItem, HStack } from "@chakra-ui/react";
+import { Box, Container, Flex, Heading, Text, List, ListItem, HStack } from "@chakra-ui/react";
 import React from "react";
 import cValueImg from "../../assets/images/cValueImg.jpg";
 

@@ -11,6 +11,8 @@ import FanvilStore from "./pages/FanvilStore";
 import CiscoStore from "./pages/CiscoStore";
 import ThePackages from "./pages/ThePackages";
 import About from "./pages/About";
+import FAQ from "./pages/FAQ";
+import Contact from "./pages/Contact";
 
 
 
@@ -24,6 +26,8 @@ const App: React.FC = () => {
                 <Routes>
                     <Route path="/" element={<Home />} />
                     <Route path="/about" element={<About />} />
+                    <Route path="/faqs" element={<FAQ />} />
+                    <Route path="/contact" element={<Contact />} />
                     <Route path="/packages" element={<ThePackages />} />
                     <Route path="/shop" element={<GeneralShop />} />
                     <Route path="/yealink" element={<YealinkStore />} />

@@ -1,13 +1,13 @@
 import { Box, Container, Flex, Heading, Text, Button } from "@chakra-ui/react";
 import React from "react";
-import abtHero from "../../assets/images/abtHero.jpg";
+import faqHero from "../../assets/images/faqHero.jpg";
 
 
-export const AboutBanner: React.FC = () => {
+export const FAQBanner: React.FC = () => {
   return (
     <Box
         id="section-home"
-        bgImage={abtHero}
+        bgImage={faqHero}
         bgSize="cover"
         bgPosition="center"
         bgAttachment="fixed"

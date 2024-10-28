@@ -12,7 +12,7 @@ export const TopBar: React.FC = () => {
           <Flex align="center" h="100%">
             <Link color="gray.600" mr={3} href="/">Home</Link>
             <Link color="gray.600" mr={3} href="/about">About</Link>
-            <Link color="gray.600" mr={3} href="/support">Support</Link>
+            <Link color="gray.600" mr={3} href="/faqs">FAQs</Link>
             <Link color="gray.600" mr={3} href="/contact">Contact</Link>
           </Flex>
         </Box>
