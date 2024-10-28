@@ -50,7 +50,7 @@ export const Intro: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={transition as any} 
             >
-              <Heading as="h2" fontWeight="bold" mb={4} className="heading blutext">
+              <Heading as="h2" fontWeight="bold" mb={4} className="heading blutext animate__animated animate__fadeIn animate__infinite my-fade-in">
                 Welcome to Linkorg VoIP
               </Heading>
               <Text mb={4} fontSize="lg" color="gray.700">
@@ -98,7 +98,7 @@ export const Intro: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={transition as any} 
             >
-              <Heading as="h2" fontWeight="bold" className="blutext" mb={4}>
+              <Heading as="h2" fontWeight="bold" className="blutext animate__animated animate__bounce animate__infinite" mb={4}>
                 VoIP Requirements
               </Heading>
               <Text mb={4} fontSize="lg" color="gray.700">

@@ -7,15 +7,17 @@ import {
   Image,
   Text,
   VStack,
+  chakra
 } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
 import Slider from 'react-slick';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
 import homeHero0 from "../../assets/images/homeHero0.jpg";
 import homeHero1 from "../../assets/images/homeHero1.jpg";
 import homeHero2 from "../../assets/images/homeHero2.jpg";
-import yealinkW76P from "../../assets/images/flyers/yealinkW76P.jpg"
-import yealinkT48U from "../../assets/images/flyers/yealinkT48U.jpg"
+import yealinkW76P from "../../assets/images/flyers/yealinkW76P.jpg";
+import yealinkT48U from "../../assets/images/flyers/yealinkT48U.jpg";
 
 // Carousel Data
 const carouselItems = [
@@ -36,16 +38,25 @@ const carouselItems = [
   },
 ];
 
+// Motion component for animations
+const MotionBox = chakra(motion.div);
+const MotionImage = chakra(motion.img);
+
 export const Banner: React.FC = () => {
   const settings = {
     dots: false,
-    lopp: true,
+    loop: true,
     autoplay: true,
     infinite: true,
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
     arrows: false,
+  };
+
+  const transition = {
+    duration: 0.3,
+    ease: [0.4, 0, 0.2, 1],
   };
 
   return (
@@ -55,21 +66,27 @@ export const Banner: React.FC = () => {
         <Box className="col-lg-8">
           <Slider {...settings} className="header-carousel">
             {carouselItems.map((item, index) => (
-              <Box
+              <MotionBox
                 key={index}
                 position="relative"
                 height="430px"
                 display="flex"
                 alignItems="center"
                 justifyContent="center"
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={transition as any} 
               >
-                <Image
+                <MotionImage
                   src={item.imgSrc}
                   alt={item.title}
                   position="absolute"
                   width="100%"
                   height="100%"
                   objectFit="cover"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={transition as any} 
                 />
                 <Flex
                   className="carousel-caption"
@@ -91,7 +108,7 @@ export const Banner: React.FC = () => {
                     </Button>
                   </VStack>
                 </Flex>
-              </Box>
+              </MotionBox>
             ))}
           </Slider>
         </Box>
@@ -99,8 +116,16 @@ export const Banner: React.FC = () => {
         {/* Offer Section */}
         <Box className="col-lg-4">
           {[yealinkW76P, yealinkT48U].map((offerImg, index) => (
-            <Box key={index} mb={6} position="relative" height="200px">
-              <Image src={`${offerImg}`} alt={`Offer ${index + 1}`} width="65%" height="100%" objectFit="cover" />
+            <MotionBox
+              key={index}
+              mb={6}
+              position="relative"
+              height="200px"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: index * 0.3 } as any} 
+            >
+              <Image src={offerImg} alt={`Offer ${index + 1}`} width="65%" height="100%" objectFit="cover" />
               <Flex
                 position="absolute"
                 top={0}
@@ -117,11 +142,10 @@ export const Banner: React.FC = () => {
                 <Heading as="h3" size="lg" color="white" mb={3}>Special Offer</Heading>
                 <Button colorScheme="orange">Shop Now</Button>
               </Flex>
-            </Box>
+            </MotionBox>
           ))}
         </Box>
       </Flex>
     </Box>
   );
 };
-

@@ -13,3 +13,11 @@
 .orange{
     background-color: #e65d0f !important;
 }
+
+.filter {
+    font-size: large !important;
+}
+
+.my-fade-in {
+    animation-duration: 60s;
+  }

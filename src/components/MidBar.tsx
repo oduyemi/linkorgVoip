@@ -39,9 +39,12 @@ export const MidBar: React.FC = () => {
 
       {/* Customer Service Info */}
       <Box width="33.33%" textAlign="right">
-        <Text m={0} color="orange">Customer Service</Text>
-        <Heading as="h5" size="sm" m={0}>
+        <Text m={0} fontWeight="bold" color="orange.500">Contact</Text>
+        <Heading as="h5" size="xs" m={0}>
           +44(0) 2033 998399
+        </Heading>
+        <Heading as="h5" size="xs" m={0}>
+          info@linkorgnet.com
         </Heading>
       </Box>
     </Flex>
