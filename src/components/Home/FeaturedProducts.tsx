@@ -25,7 +25,7 @@ export const FeaturedProducts: React.FC = () => {
           <Box key={product.id} bg="gray.50" p={5} shadow="md" borderWidth="1px" borderRadius="lg">
             <Box position="relative" overflow="hidden">
               <Image src={product.image} alt={product.name} borderRadius="lg" />
-              <Flex position="absolute" top="2" right="5">
+              <Flex position="relative" top="0" left="12">
                 <IconButton aria-label="Add to cart" icon={<FaShoppingCart />} variant="outline" colorScheme="gray" size="sm" />
                 <IconButton aria-label="Add to wishlist" icon={<FaHeart />} variant="outline" colorScheme="red" size="sm" ml={2} />
                 <IconButton aria-label="Compare" icon={<FaSyncAlt />} variant="outline" colorScheme="gray" size="sm" ml={2} />
