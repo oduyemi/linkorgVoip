@@ -89,7 +89,7 @@ export const CoreValues: React.FC = () => {
                   {value.number}
                 </Text>
               </HStack>
-              <Heading as="h3" size="md" mb={4}>
+              <Heading as="h3" color="orange.500" size="md" mb={4}>
                 {value.title}
               </Heading>
               <Text mb={6}>{value.description}</Text>
