@@ -4,6 +4,42 @@ import { FAQ } from "./FaqTemplate";
 
 const faqData = [
   {
+    question: "What is VOIP?",
+    answer: "Voice over Internet Protocol is a convenient, affordable means for businesses and individuals to use the internet to conduct telephone calls, and represents a more cost-effective alternative to traditional PSTN.",
+  },
+  {
+    question: "What is PBXware?",
+    answer: "Incorporating a range of traditional telephony and modern VoIP technologies, PBXware is a scalable solution that enables enhanced management of business telecommunications. From routing and voicemail, to auto attendants and conferencing, PBXware can offer advanced features in a single package, saving you money on multiple systems.",
+  },
+  {
+    question: "What is DID?",
+    answer: "Direct Inward Dialling is a feature used with PBX systems and sees a telephone company allocate a range of numbers associated with one or more phone lines. DID enables businesses to assign a personal number to each employee, without requiring a separate phone line for each.",
+  },
+  {
+    question: "What are SIP phones?",
+    answer: "SIP phones are used for VoIP calls and are available in two types: hardphone (resembling a common telephone) and softphone (a computer software phone)",
+  },
+  {
+    question: "What is Business SIP Truncking",
+    answer: "Business SIP trunking is a service that enables your company to operate a selection of telecommunications systems over your IP network, and offers a number of benefits. From cheaper international call costs to improved business flexibility, a Disaster Recover strategy to give access to an increased quantity of numbers, business SIP trunking from Xinix World can enhance the way your business stays connected.",
+  },
+  {
+    question: "How do I set up VoIP?",
+    answer: "You need Broadband internet connection. The more call volume you have the higher the bandwidth you will need. We have low call volume and are using a 7Mbps/700Kbps connection, this has been plenty of bandwidth for us. Wired Ethernet router. You have a ton of options here but your budget will likely decide this one.",
+  },
+  {
+    question: "How secure is VoIP?",
+    answer: "Security for VoIP uses industry standard encryption technology such as SSL and VPN.",
+  },
+  {
+    question: "Can I use VoIP with a regular(analogue) telephone?",
+    answer: "To connect VoIP phones to traditional telephony networks, you need to install an Analog Telephone Adapter (ATA) which converts the analog signal into digital data.",
+  },
+  {
+    question: "Does VoIP work on dial-up?",
+    answer: "A dial-up connection can support VoIP, but it is recommended to use broadband since certain codecs require higher bandwidths for quality purposes.",
+  },
+  {
     question: "What are the benefits of using LinkOrg Networks' VoIP solutions over traditional phone lines?",
     answer: "Our VoIP solutions offer greater flexibility, lower costs, and advanced features like call forwarding, video conferencing, and multi-device integration. It’s an efficient alternative to traditional phone systems.",
   },
