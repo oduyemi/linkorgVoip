@@ -50,14 +50,14 @@ export const AdBox: React.FC<AdBoxProps> = ({ backgroundImage }) => {
             mb={4}
             initial={{ y: -20 }}
             animate={{ y: 0 }}
-            transition={{ duration: slideTransition.duration, ease: slideTransition.ease }} // Adjusted to meet type expectations
+            transition={{ duration: slideTransition.duration, ease: slideTransition.ease }} 
           >
             LinkOrg VoIP provides reliable VoIP communication services, with our secure cloud-based PBX fully redundant, enabling you to make calls to anywhere in the world.
           </MotionBox>
           <MotionBox
             initial={{ scale: 0.8 }}
             animate={{ scale: 1 }}
-            transition={{ duration: scaleTransition.duration, ease: scaleTransition.ease }} // Adjusted to meet type expectations
+            transition={{ duration: scaleTransition.duration, ease: scaleTransition.ease }} 
           >
             <Button
               as="a"

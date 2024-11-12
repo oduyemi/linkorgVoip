@@ -177,6 +177,9 @@ export const YealinkProducts: React.FC = () => {
               <VStack spacing={2}>
                 <Text fontSize="lg" fontWeight="semibold" isTruncated>{product.title}</Text>
                 <Text fontSize="md" color="gray.600">{product.brand}</Text>
+                <Button colorScheme="orange" variant="outline" mt={3}>
+                  Shop Now
+                </Button>
               </VStack>
             </Box>
           </Box>
