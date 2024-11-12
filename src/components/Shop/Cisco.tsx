@@ -41,31 +41,6 @@ export const Cisco: React.FC = () => {
               </Stack>
             </FormControl>
           </Box>
-
-          {/* Brand Filter */}
-          <Heading as="h6" fontSize="lg" mb={3} textTransform="uppercase">
-            <Box as="span" color="blue.600">Filter by Brand</Box>
-          </Heading>
-          <Box bg="gray.50" p={4} borderRadius="md">
-            <FormControl as="form">
-              <Checkbox defaultChecked>
-                All Brands
-                <Badge ml={2} fontWeight="normal" border="1px" borderColor="gray.300">
-                  1000
-                </Badge>
-              </Checkbox>
-              <Stack spacing={3} mt={3}>
-                {["Cisco", "Fanvil", "Grandstream", "Yealink"].map((brand, index) => (
-                  <Checkbox key={index}>
-                    {brand}
-                    <Badge ml={2} fontWeight="normal" border="1px" borderColor="gray.300">
-                      {Math.floor(Math.random() * 300) + 100} {/* Random count placeholder */}
-                    </Badge>
-                  </Checkbox>
-                ))}
-              </Stack>
-            </FormControl>
-          </Box>
         </Box>
         {/* Shop Sidebar End */}
 

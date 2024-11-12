@@ -11,6 +11,8 @@ import {
   Image,
   VStack,
   Spinner,
+  Checkbox,
+  Stack,
 } from "@chakra-ui/react";
 import {
   FaThLarge,
@@ -23,33 +25,62 @@ import {
 import axios from "axios";
 
 interface Product {
-  id: string; // mongodb object ID
+  id: string; // MongoDB object ID
   title: string;
   brand: string;
   img: string;
 }
 
+const brandUrls: { [key: string]: string } = {
+  all: "https://linkorg-voip.vercel.app/api/v1/products",
+  cisco: "https://linkorg-voip.vercel.app/api/v1/products/cisco",
+  fanvil: "https://linkorg-voip.vercel.app/api/v1/products/fanvil",
+  grandstream: "https://linkorg-voip.vercel.app/api/v1/products/grandstream",
+  yealink: "https://linkorg-voip.vercel.app/api/v1/products/yealink",
+};
+
 export const CiscoProducts: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(["cisco"]);
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 });
   const iconSize = useBreakpointValue({ base: "xs", md: "sm" });
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get("https://linkorg-voip.vercel.app/api/v1/products/cisco");
-        console.log(response.data.data);  
+  const fetchProducts = async () => {
+    setLoading(true);
+    try {
+      if (selectedBrands.includes("all") || selectedBrands.length === 0) {
+        const response = await axios.get(brandUrls["all"]);
         setProducts(response.data.data);
-        setLoading(false);  
-      } catch (error) {
-        console.error("Error fetching products:", error);
-        setLoading(false);  
+      } else {
+        const brandRequests = selectedBrands.map((brand) => axios.get(brandUrls[brand]));
+        const responses = await Promise.all(brandRequests);
+        const fetchedProducts = responses.flatMap((res) => res.data.data);
+        setProducts(fetchedProducts);
       }
-    };
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [selectedBrands]);
+
+  const handleBrandChange = (brand: string) => {
+    if (brand === "all") {
+      setSelectedBrands(["all"]);
+    } else {
+      setSelectedBrands((prevBrands) => {
+        const updatedBrands = prevBrands.includes(brand)
+          ? prevBrands.filter((b) => b !== brand)
+          : [...prevBrands, brand].filter((b) => b !== "all");
+        return updatedBrands.length === 0 ? ["all"] : updatedBrands;
+      });
+    }
+  };
 
   if (loading) {
     return (
@@ -61,6 +92,28 @@ export const CiscoProducts: React.FC = () => {
 
   return (
     <Box p={4}>
+      {/* Filter by Brand */}
+      <Box mb={4}>
+        <Text fontWeight="bold" mb={2}>Filter by Brand:</Text>
+        <Stack spacing={2} direction="row">
+          <Checkbox isChecked={selectedBrands.includes("all")} onChange={() => handleBrandChange("all")}>
+            All
+          </Checkbox>
+          <Checkbox isChecked={selectedBrands.includes("cisco")} onChange={() => handleBrandChange("cisco")}>
+            Cisco
+          </Checkbox>
+          <Checkbox isChecked={selectedBrands.includes("fanvil")} onChange={() => handleBrandChange("fanvil")}>
+            Fanvil
+          </Checkbox>
+          <Checkbox isChecked={selectedBrands.includes("grandstream")} onChange={() => handleBrandChange("grandstream")}>
+            Grandstream
+          </Checkbox>
+          <Checkbox isChecked={selectedBrands.includes("yealink")} onChange={() => handleBrandChange("yealink")}>
+            Yealink
+          </Checkbox>
+        </Stack>
+      </Box>
+
       <Flex mb={4} justifyContent="space-between" alignItems="center">
         <Flex>
           <IconButton aria-label="Grid view" icon={<FaThLarge />} variant="outline" size={iconSize} />
@@ -74,35 +127,35 @@ export const CiscoProducts: React.FC = () => {
 
       <Grid templateColumns={`repeat(${columns}, 1fr)`} gap={4}>
         {products.map((product) => (
-          <Box 
-            key={product.id} 
-            bg="white" 
-            borderRadius="md" 
-            boxShadow="md" 
-            overflow="hidden" 
-            mb={4} 
+          <Box
+            key={product.id}
+            bg="white"
+            borderRadius="md"
+            boxShadow="md"
+            overflow="hidden"
+            mb={4}
             position="relative"
-            _hover={{ boxShadow: "lg" }}  
+            _hover={{ boxShadow: "lg" }}
           >
-            <Image 
+            <Image
               src={`https://linkorg-voip.vercel.app/${product.img}`}
-              alt={product.title} 
-              width="100%" 
-              height="auto" 
+              alt={product.title}
+              width="100%"
+              height="auto"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "https://via.placeholder.com/150";
-              }} 
+              }}
             />
 
-            <Flex 
-              position="absolute" 
-              top="36%" 
-              left="50%" 
-              transform="translate(-50%, -50%)" 
-              opacity={0} 
+            <Flex
+              position="absolute"
+              top="36%"
+              left="50%"
+              transform="translate(-50%, -50%)"
+              opacity={0}
               transition="opacity 0.3s ease"
-              _hover={{ opacity: 1 }} 
+              _hover={{ opacity: 1 }}
               zIndex={1}
               gap={2}
             >
