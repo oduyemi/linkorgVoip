@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -10,7 +10,8 @@ import {
   useBreakpointValue,
   Image,
   VStack,
-} from '@chakra-ui/react';
+  Spinner,
+} from "@chakra-ui/react";
 import {
   FaThLarge,
   FaBars,
@@ -18,83 +19,45 @@ import {
   FaHeart,
   FaSyncAlt,
   FaSearch,
-  FaStar,
-  FaStarHalfAlt,
-} from 'react-icons/fa';
-import yealinkW76P from "../../assets/images/flyers/yealinkW76P.jpg";
-import yealinkT48U from "../../assets/images/flyers/yealinkT48U.jpg";
-import yealinkW73P from "../../assets/images/flyers/yealinkW73P.jpg";
+} from "react-icons/fa";
+import axios from "axios";
 
-const products = [
-  {
-    id: 1,
-    name: "Yealink - T48U",
-    price: '£123.00',
-    oldPrice: '£145.00',
-    rating: 5,
-    imageUrl: yealinkT48U,
-  },
-  {
-    id: 2,
-    name: "Yealink - W73P",
-    price: '£123.00',
-    oldPrice: '£145.00',
-    rating: 4.5,
-    imageUrl: yealinkW73P,
-  },
-  {
-    id: 3,
-    name: "Yealink - W76P",
-    price: '£123.00',
-    oldPrice: '£145.00',
-    rating: 4,
-    imageUrl: yealinkW76P,
-  },
-  {
-    id: 4,
-    name: "Yealink - W73P",
-    price: '£123.00',
-    oldPrice: '£145.00',
-    rating: 3,
-    imageUrl: yealinkW73P,
-  },
-  {
-    id: 5,
-    name: "Yealink - T48U",
-    price: '£123.00',
-    oldPrice: '£145.00',
-    rating: 5,
-    imageUrl: yealinkT48U,
-  },
-  {
-    id: 6,
-    name: "Yealink - W76P",
-    price: '£123.00',
-    oldPrice: '£145.00',
-    rating: 4.5,
-    imageUrl: yealinkW76P,
-  },
-  {
-    id: 7,
-    name: "Yealink - T48U",
-    price: '£123.00',
-    oldPrice: '£145.00',
-    rating: 4,
-    imageUrl: yealinkT48U,
-  },
-  {
-    id: 8,
-    name: "Yealink - W76P",
-    price: '£123.00',
-    oldPrice: '£145.00',
-    rating: 3.5,
-    imageUrl: yealinkW76P,
-  },
-];
+interface Product {
+  id: string; // mongodb object ID
+  title: string;
+  brand: string;
+  img: string;
+}
 
 export const FanvilProducts: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 });
   const iconSize = useBreakpointValue({ base: "xs", md: "sm" });
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get("https://linkorg-voip.vercel.app/api/v1/products/fanvil");
+        console.log(response.data.data);  
+        setProducts(response.data.data);
+        setLoading(false);  
+      } catch (error) {
+        console.error("Error fetching products:", error);
+        setLoading(false);  
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  if (loading) {
+    return (
+      <Box p={4} textAlign="center">
+        <Spinner size="xl" />
+      </Box>
+    );
+  }
 
   return (
     <Box p={4}>
@@ -121,7 +84,16 @@ export const FanvilProducts: React.FC = () => {
             position="relative"
             _hover={{ boxShadow: "lg" }}  
           >
-            <Image src={product.imageUrl} alt={product.name} width="100%" height="auto" />
+            <Image 
+              src={`https://linkorg-voip.vercel.app/${product.img}`}
+              alt={product.title} 
+              width="100%" 
+              height="auto" 
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "https://via.placeholder.com/150";
+              }} 
+            />
 
             <Flex 
               position="absolute" 
@@ -150,19 +122,8 @@ export const FanvilProducts: React.FC = () => {
 
             <Box textAlign="center" py={4}>
               <VStack spacing={2}>
-                <Text fontSize="lg" fontWeight="semibold" isTruncated>{product.name}</Text>
-                <Flex alignItems="center" justifyContent="center">
-                  <Text fontSize="xl" fontWeight="bold">{product.price}</Text>
-                  <Text fontSize="sm" color="gray.500" ml={2} textDecoration="line-through">{product.oldPrice}</Text>
-                </Flex>
-                <Flex alignItems="center" justifyContent="center">
-                  {Array.from({ length: 5 }, (_, index) => (
-                    <Box as="span" key={index} color={index < Math.floor(product.rating) ? 'yellow.400' : 'gray.400'}>
-                      {index < product.rating ? <FaStar /> : <FaStarHalfAlt />}
-                    </Box>
-                  ))}
-                  <Text ml={2} fontSize="sm">({product.rating * 20})</Text>
-                </Flex>
+                <Text fontSize="lg" fontWeight="semibold" isTruncated>{product.title}</Text>
+                <Text fontSize="md" color="gray.600">{product.brand}</Text>
               </VStack>
             </Box>
           </Box>

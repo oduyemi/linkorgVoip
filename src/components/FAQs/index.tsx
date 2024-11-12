@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Heading, Text, Flex, VStack } from "@chakra-ui/react";
-import { FAQ } from "./FaqTemplate";
 
 const faqData = [
   {
