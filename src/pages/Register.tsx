@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import React from "react";
 import { Footer } from "../components/Footer";
-import { RegisterForm } from "../components/Auth/RegisterForm";
+import { RegisterForm } from "../components/Forms/RegisterForm";
 
 
 

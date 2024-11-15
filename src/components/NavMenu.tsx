@@ -89,11 +89,11 @@ export const NavMenu: React.FC = () => {
                 <Link href="/packages" className="nav-item nav-link">Packages</Link>
               </Flex>
               <HStack spacing={4} className="navbar-nav ml-auto py-0 d-none d-lg-block">
-                <Link className="btn px-0" href="#">
+                <Link className="btn px-0" href="/wishlist">
                   <FaHeart className="text-white" />
                   <span className="badge text-white border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
                 </Link>
-                <Link className="btn px-0 ml-3" href="#">
+                <Link className="btn px-0 ml-3" href="/cart">
                   <FaShoppingCart className="text-white" />
                   <span className="badge text-white border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
                 </Link>
