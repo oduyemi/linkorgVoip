@@ -119,7 +119,7 @@ export const Dashboard: React.FC = () => {
           ))}
         </Slider>
       </Box>
-
+      <Divider />
       {/* Purchased Items */}
       <Box>
         <Text fontSize="lg" fontWeight="semibold" color="#010156" mb={4}>
@@ -224,8 +224,6 @@ export const Dashboard: React.FC = () => {
           ))}
         </SimpleGrid>
       </Box>
-
-      <Divider />
     </VStack>
   );
 };

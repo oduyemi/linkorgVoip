@@ -7,7 +7,9 @@ const UserDashboard: React.FC = () => {
     return(
         <Box>
             <Dashboard />
-            <Footer />
+            <Box  className="mt-5">
+                <Footer />
+            </Box>
         </Box>
     )
 }
