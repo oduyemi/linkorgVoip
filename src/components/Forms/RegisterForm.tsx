@@ -101,6 +101,7 @@ export const RegisterForm: React.FC = () => {
           phone,
           address,
           password,
+          confirmPassword
         }),
       });
 
