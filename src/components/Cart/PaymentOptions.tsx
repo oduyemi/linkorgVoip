@@ -4,7 +4,6 @@ import {
   Button,
   VStack,
   Link,
-  HStack,
   Text,
   Divider,
   useToast,
@@ -19,7 +18,7 @@ export const PaymentOption: React.FC = () => {
   const toast = useToast();
   const [selectedProvider, setSelectedProvider] = useState<string | null>(null);
   const cardBg = useColorModeValue('white', 'gray.700');
-  const cardHoverBg = useColorModeValue('gray.100', 'gray.600');
+  // const cardHoverBg = useColorModeValue('gray.100', 'gray.600');
   const primaryColor = '#010156';
   const accentColor = '#e65d0f';
 

@@ -1,5 +1,4 @@
-// src/pages/Register.tsx
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -15,49 +14,123 @@ import {
   HStack,
   Link,
   IconButton,
-} from '@chakra-ui/react';
-import { FaGoogle, FaFacebook } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+} from "@chakra-ui/react";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
+import { motion } from "framer-motion";
+
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
+const validatePhone = (phone: string): boolean => {
+  const phoneRegex = /^\d{10,15}$/;
+  return phoneRegex.test(phone);
+};
 
 export const RegisterForm: React.FC = () => {
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [address, setAddress] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const toast = useToast();
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
 
-    // Example: Replace with your registration logic
-    if (password !== confirmPassword) {
+    if (!validateEmail(email)) {
       toast({
-        title: 'Password Mismatch',
-        description: 'Passwords do not match. Please try again.',
-        status: 'error',
+        title: "Invalid Email",
+        description: "Please enter a valid email address.",
+        status: "error",
         duration: 3000,
         isClosable: true,
       });
-      setLoading(false);
       return;
     }
 
-    // Simulate successful registration
-    toast({
-      title: 'Registration Successful',
-      description: 'You have registered successfully!',
-      status: 'success',
-      duration: 3000,
-      isClosable: true,
-    });
-    setLoading(false);
-  };
+    if (!validatePhone(phone)) {
+      toast({
+        title: "Invalid Phone Number",
+        description: "Phone number should contain only digits and be 10-15 characters long.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
 
+    if (password !== confirmPassword) {
+      toast({
+        title: "Password Mismatch",
+        description: "Passwords do not match. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+
+      if (!firstName || !lastName || !address) {
+        toast({
+          title: "Missing Information",
+          description: "All fields are required.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
+        });
+        return;
+      }
+      
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const response = await fetch("https://linkorg-voip.vercel.app/api/v1/users/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          email,
+          phone,
+          address,
+          password,
+        }),
+      });
+
+      const data = await response.json();
+      console.log(data); 
+
+
+      if (response.ok) {
+        toast({
+          title: "Registration Successful",
+          description: "Your account has been created successfully!",
+          status: "success",
+          duration: 3000,
+          isClosable: true,
+        });
+      } else {
+        throw new Error(data.message || "Registration failed. Please try again.");
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <VStack
       spacing={8}
@@ -79,8 +152,8 @@ export const RegisterForm: React.FC = () => {
         borderColor="#e65d0f"
         transition="transform 0.3s ease-in-out"
         _hover={{
-          transform: 'scale(1.05)',
-          boxShadow: '0 4px 20px rgba(0, 0, 0, 0.1)',
+          transform: "scale(1.05)",
+          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.1)",
         }}
       >
         <motion.div
@@ -104,8 +177,8 @@ export const RegisterForm: React.FC = () => {
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   _focus={{
-                    borderColor: '#e65d0f',
-                    boxShadow: '0 0 0 1px #e65d0f',
+                    borderColor: "#e65d0f",
+                    boxShadow: "0 0 0 1px #e65d0f",
                   }}
                 />
               </FormControl>
@@ -120,8 +193,8 @@ export const RegisterForm: React.FC = () => {
                   value={lastName}
                   onChange={(e) => setLastName(e.target.value)}
                   _focus={{
-                    borderColor: '#e65d0f',
-                    boxShadow: '0 0 0 1px #e65d0f',
+                    borderColor: "#e65d0f",
+                    boxShadow: "0 0 0 1px #e65d0f",
                   }}
                 />
               </FormControl>
@@ -136,8 +209,8 @@ export const RegisterForm: React.FC = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   _focus={{
-                    borderColor: '#e65d0f',
-                    boxShadow: '0 0 0 1px #e65d0f',
+                    borderColor: "#e65d0f",
+                    boxShadow: "0 0 0 1px #e65d0f",
                   }}
                 />
               </FormControl>
@@ -152,8 +225,8 @@ export const RegisterForm: React.FC = () => {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                   _focus={{
-                    borderColor: '#e65d0f',
-                    boxShadow: '0 0 0 1px #e65d0f',
+                    borderColor: "#e65d0f",
+                    boxShadow: "0 0 0 1px #e65d0f",
                   }}
                 />
               </FormControl>
@@ -168,8 +241,8 @@ export const RegisterForm: React.FC = () => {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   _focus={{
-                    borderColor: '#e65d0f',
-                    boxShadow: '0 0 0 1px #e65d0f',
+                    borderColor: "#e65d0f",
+                    boxShadow: "0 0 0 1px #e65d0f",
                   }}
                 />
               </FormControl>
@@ -184,8 +257,8 @@ export const RegisterForm: React.FC = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   _focus={{
-                    borderColor: '#e65d0f',
-                    boxShadow: '0 0 0 1px #e65d0f',
+                    borderColor: "#e65d0f",
+                    boxShadow: "0 0 0 1px #e65d0f",
                   }}
                 />
               </FormControl>
@@ -200,8 +273,8 @@ export const RegisterForm: React.FC = () => {
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   _focus={{
-                    borderColor: '#e65d0f',
-                    boxShadow: '0 0 0 1px #e65d0f',
+                    borderColor: "#e65d0f",
+                    boxShadow: "0 0 0 1px #e65d0f",
                   }}
                 />
               </FormControl>
@@ -213,8 +286,8 @@ export const RegisterForm: React.FC = () => {
                 width="full"
                 isLoading={loading}
                 loadingText="Registering..."
-                _hover={{ bg: '#e65d0f' }}
-                _active={{ bg: '#e65d0f' }}
+                _hover={{ bg: "#e65d0f" }}
+                _active={{ bg: "#e65d0f" }}
               >
                 Register
               </Button>

@@ -1,4 +1,4 @@
-import { Box, Heading } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import { Wishlist } from "../components/Cart/Wishlist";
 

@@ -1,5 +1,5 @@
-// src/pages/Login.tsx
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
+import { UserContext } from '../../usercontext'; 
 import {
   Box,
   Button,
@@ -8,47 +8,41 @@ import {
   Input,
   Stack,
   Heading,
-  useToast,
   VStack,
   Divider,
   Text,
   Link,
   HStack,
   IconButton,
-  useBreakpointValue,
+  InputGroup,
+  InputRightElement,
 } from '@chakra-ui/react';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 export const LoginForm: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { handleLogin, flashMessage } = useContext(UserContext);
+  const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
-  const toast = useToast();
+  const [showPassword, setShowPassword] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const toggleShowPassword = () => setShowPassword((prev) => !prev);
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // Example: Replace with your authentication logic
-    if (email === 'test@example.com' && password === 'password') {
-      toast({
-        title: 'Login Successful',
-        description: 'You have logged in successfully!',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      });
-    } else {
-      toast({
-        title: 'Login Failed',
-        description: 'Invalid credentials. Please try again.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-    }
+    const success = await handleLogin(formData.email, formData.password);
     setLoading(false);
+
+    if (success) {
+      const requestedPath = localStorage.getItem('requestedPath');
+      window.location.href = requestedPath || '/dashboard';
+    }
   };
 
   return (
@@ -83,16 +77,18 @@ export const LoginForm: React.FC = () => {
             Login to Your Account
           </Heading>
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSubmit}>
             <Stack spacing={4}>
               <FormControl isRequired>
                 <FormLabel htmlFor="email">Email Address</FormLabel>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
+                  aria-label="Email address"
                   _focus={{
                     borderColor: '#e65d0f',
                     boxShadow: '0 0 0 1px #e65d0f',
@@ -102,17 +98,26 @@ export const LoginForm: React.FC = () => {
 
               <FormControl isRequired>
                 <FormLabel htmlFor="password">Password</FormLabel>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  _focus={{
-                    borderColor: '#e65d0f',
-                    boxShadow: '0 0 0 1px #e65d0f',
-                  }}
-                />
+                <InputGroup>
+                  <Input
+                    id="password"
+                    name="password"
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder="Enter your password"
+                    value={formData.password}
+                    onChange={handleChange}
+                    aria-label="Password"
+                    _focus={{
+                      borderColor: '#e65d0f',
+                      boxShadow: '0 0 0 1px #e65d0f',
+                    }}
+                  />
+                  <InputRightElement>
+                    <Button size="sm" onClick={toggleShowPassword}>
+                      {showPassword ? 'Hide' : 'Show'}
+                    </Button>
+                  </InputRightElement>
+                </InputGroup>
               </FormControl>
 
               <Button
@@ -133,7 +138,7 @@ export const LoginForm: React.FC = () => {
             <Link color="#e65d0f" href="#">
               Forgot Password?
             </Link>
-            <Link color="#010156" style={{fontSize:"12px"}} href="/register">
+            <Link color="#010156" fontSize="12px" href="/register">
               Don't have an account? Sign Up
             </Link>
           </HStack>
@@ -167,4 +172,3 @@ export const LoginForm: React.FC = () => {
     </VStack>
   );
 };
-

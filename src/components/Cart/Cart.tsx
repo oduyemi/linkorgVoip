@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Button, useToast, Box, Text, Flex, Stack, IconButton } from '@chakra-ui/react';
-import { Card, Col, Row } from 'react-bootstrap';
-import { FaTrashAlt } from 'react-icons/fa'; // Import trash icon for remove button
+import { FaTrashAlt } from 'react-icons/fa'; 
 
 // Define types for cart item
 interface CartItem {

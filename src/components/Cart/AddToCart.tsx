@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Box, Text, Image, Flex, useToast, Stack } from '@chakra-ui/react';
+import { Button, Box, Text, Image, useToast, Stack } from '@chakra-ui/react';
 import { FaCartPlus } from 'react-icons/fa'; 
 
 interface Product {

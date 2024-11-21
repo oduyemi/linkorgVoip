@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Text,
@@ -11,6 +11,7 @@ import {
   Divider,
 } from '@chakra-ui/react';
 import { FaTrash, FaShoppingCart } from 'react-icons/fa';
+import axios from 'axios';
 
 // Define the product type
 interface Product {
@@ -22,37 +23,48 @@ interface Product {
 }
 
 export const Wishlist: React.FC = () => {
-  const [wishlist, setWishlist] = useState<Product[]>([
-    {
-      id: '1',
-      name: 'Smartwatch',
-      price: 199.99,
-      imageUrl: 'https://via.placeholder.com/300x200',
-      isNew: true,
-    },
-    {
-      id: '2',
-      name: 'Bluetooth Speaker',
-      price: 79.99,
-      imageUrl: 'https://via.placeholder.com/300x200',
-    },
-  ]);
-
+  const [wishlist, setWishlist] = useState<Product[]>([]);
   const toast = useToast();
 
-  // Handle remove from wishlist
-  const handleRemoveFromWishlist = (productId: string) => {
-    setWishlist((prevWishlist) => prevWishlist.filter((product) => product.id !== productId));
-    toast({
-      title: 'Item Removed',
-      description: 'The item has been removed from your wishlist.',
-      status: 'info',
-      duration: 3000,
-      isClosable: true,
-    });
+  // Fetch wishlist data from the backend
+  const fetchWishlist = async () => {
+    try {
+      const response = await axios.get('https://linkorg-voip.vercel.app/api/v1/wishlist'); 
+      setWishlist(response.data.items);
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to load wishlist.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
   };
 
-  // Handle add to cart
+  // Handle remove from wishlist
+  const handleRemoveFromWishlist = async (productId: string) => {
+    try {
+      await axios.delete(`https://linkorg-voip.vercel.app/api/v1/wishlist/${productId}`); 
+      setWishlist((prevWishlist) => prevWishlist.filter((product) => product.id !== productId));
+      toast({
+        title: 'Item Removed',
+        description: 'The item has been removed from your wishlist.',
+        status: 'info',
+        duration: 3000,
+        isClosable: true,
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to remove item from wishlist.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+
   const handleAddToCart = (product: Product) => {
     toast({
       title: 'Added to Cart',
@@ -62,6 +74,10 @@ export const Wishlist: React.FC = () => {
       isClosable: true,
     });
   };
+
+  useEffect(() => {
+    fetchWishlist();
+  }, []);
 
   return (
     <VStack spacing={6} align="stretch" p={6}>
@@ -136,4 +152,3 @@ export const Wishlist: React.FC = () => {
     </VStack>
   );
 };
-

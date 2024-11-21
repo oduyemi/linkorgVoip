@@ -1,6 +1,6 @@
 import React from 'react';
 import { PaystackButton } from 'react-paystack';
-import { VStack, Text, Box, useToast, Button } from '@chakra-ui/react';
+import { VStack, Text, Box, useToast } from '@chakra-ui/react';
 
 interface PaystackPaymentProps {
   amount: number; 

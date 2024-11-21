@@ -7,7 +7,6 @@ import {
   Badge,
   Stack,
   Flex,
-  VStack,
 } from "@chakra-ui/react";
 import { YealinkProducts } from "./YealinkProducts";
 

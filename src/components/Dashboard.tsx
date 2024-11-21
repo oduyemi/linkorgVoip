@@ -2,18 +2,17 @@ import React from 'react';
 import {
   Box,
   VStack,
-  HStack,
   Text,
   SimpleGrid,
   Image,
   Divider,
   Button,
   useBreakpointValue,
-  Badge,
-  Stack,
 } from '@chakra-ui/react';
-import Slider from 'react-slick'; // Import Slick Slider
-import { useNavigate } from 'react-router-dom'; // Replace useHistory with useNavigate
+import Slider from 'react-slick'; 
+import { useNavigate } from 'react-router-dom'; 
+
+
 
 interface Product {
   id: number;
@@ -23,7 +22,7 @@ interface Product {
 }
 
 export const Dashboard: React.FC = () => {
-  const navigate = useNavigate(); // Using navigate to navigate to other pages
+  const navigate = useNavigate(); 
 
   // Sample data for purchased items, wishlist, and cart items
   const purchasedItems: Product[] = [

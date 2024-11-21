@@ -23,12 +23,14 @@ import {
   FaSearch,
 } from "react-icons/fa";
 import axios from "axios";
+import { useCart } from "../Cart/CartContext";
 
 interface Product {
   id: string; // MongoDB object ID
   title: string;
   brand: string;
   img: string;
+  price: number;
 }
 
 const brandUrls: { [key: string]: string } = {
@@ -45,6 +47,8 @@ export const GrandstreamProducts: React.FC = () => {
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["grandstream"]);
   const columns = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4 });
   const iconSize = useBreakpointValue({ base: "xs", md: "sm" });
+
+  const { addToCart, getCartCount } = useCart(); 
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -80,6 +84,16 @@ export const GrandstreamProducts: React.FC = () => {
         return updatedBrands.length === 0 ? ["all"] : updatedBrands;
       });
     }
+  };
+
+  const handleAddToCart = (product: Product) => {
+    const cartProduct = {
+      id: product.id,
+      title: product.title,
+      price: product.price,
+      quantity: 1,
+    };
+    addToCart(cartProduct); 
   };
 
   if (loading) {
@@ -144,44 +158,25 @@ export const GrandstreamProducts: React.FC = () => {
               height="auto"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = "https://via.placeholder.com/150";
+                target.src = "https://via.placeholder.com/300";
               }}
             />
-
-            <Flex
-              position="absolute"
-              top="36%"
-              left="50%"
-              transform="translate(-50%, -50%)"
-              opacity={0}
-              transition="opacity 0.3s ease"
-              _hover={{ opacity: 1 }}
-              zIndex={1}
-              gap={2}
-            >
-              <Tooltip label="Add to Cart" aria-label="Add to Cart">
-                <IconButton aria-label="Add to Cart" icon={<FaShoppingCart />} variant="outline" size={iconSize} />
-              </Tooltip>
-              <Tooltip label="Add to Wishlist" aria-label="Add to Wishlist">
-                <IconButton aria-label="Add to Wishlist" icon={<FaHeart />} variant="outline" colorScheme="red" size={iconSize} />
-              </Tooltip>
-              <Tooltip label="Compare" aria-label="Compare">
-                <IconButton aria-label="Compare" icon={<FaSyncAlt />} variant="outline" size={iconSize} />
-              </Tooltip>
-              <Tooltip label="View Details" aria-label="View Details">
-                <IconButton aria-label="View Details" icon={<FaSearch />} variant="outline" size={iconSize} />
-              </Tooltip>
-            </Flex>
-
-            <Box textAlign="center" py={4}>
-              <VStack spacing={2}>
-                <Text fontSize="lg" fontWeight="semibold" isTruncated>{product.title}</Text>
-                <Text fontSize="md" color="gray.600">{product.brand}</Text>
-                <Button colorScheme="orange" variant="outline" mt={3}>
+            <VStack spacing={2} p={4} align="start">
+              <Text fontSize="lg" fontWeight="bold" className="blutext">{product.title}</Text>
+              <Flex textAlign="center">
+                <Text fontSize="md" fontWeight="bold" textAlign="right" color="gray.700">&emsp; ${product.price}</Text> &emsp;
+                <Text color="gray.500" textAlign="center">&emsp; {product.brand}</Text>
+              </Flex>
+              <Box className="text-center">
+                &nbsp; &nbsp;
+                <Button 
+                  leftIcon={<FaShoppingCart />}
+                  onClick={() => handleAddToCart(product)}
+                  colorScheme="orange" variant="outline" mt={3}>
                   Add to Cart
                 </Button>
-              </VStack>
-            </Box>
+              </Box>
+            </VStack>
           </Box>
         ))}
       </Grid>
