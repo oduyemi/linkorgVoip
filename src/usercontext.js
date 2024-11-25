@@ -20,11 +20,11 @@ export const UserProvider = ({ children }) => {
   const handleLogin = async (email, password) => {
     try {
       const response = await axios.post("https://linkorg-voip.vercel.app/api/v1/users/login", { email, password });
-      const { userid, firstName, lastName, email: userEmail, phone, address, token } = response.data;
-      localStorage.setItem("user", JSON.stringify({ userid, firstName, lastName, userEmail, phone, address }));
+      const { id, firstName, lastName, userEmail, address, phone, token } = response.data.user;
+      localStorage.setItem("user", JSON.stringify({ id, firstName, lastName, email, address, phone }));
       localStorage.setItem("token", token);
 
-      setUser({ userid, firstName, lastName, userEmail, phone, address });
+      setUser({ id, firstName, lastName, userEmail, phone, address });
       setFlashMessage({ type: "success", message: "Login Successful. Welcome Back!" });
       window.location.href = "/dashboard";
       return true;

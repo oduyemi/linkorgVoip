@@ -15,10 +15,10 @@ import axios from 'axios';
 
 // Define the product type
 interface Product {
-  id: string;
-  name: string;
+  _id: string;
+  title: string;
   price: number;
-  imageUrl: string;
+  img: string;
   isNew?: boolean;
 }
 
@@ -46,7 +46,7 @@ export const Wishlist: React.FC = () => {
   const handleRemoveFromWishlist = async (productId: string) => {
     try {
       await axios.delete(`https://linkorg-voip.vercel.app/api/v1/wishlist/${productId}`); 
-      setWishlist((prevWishlist) => prevWishlist.filter((product) => product.id !== productId));
+      setWishlist((prevWishlist) => prevWishlist.filter((product) => product._id !== productId));
       toast({
         title: 'Item Removed',
         description: 'The item has been removed from your wishlist.',
@@ -68,7 +68,7 @@ export const Wishlist: React.FC = () => {
   const handleAddToCart = (product: Product) => {
     toast({
       title: 'Added to Cart',
-      description: `${product.name} has been added to your cart.`,
+      description: `${product.title} has been added to your cart.`,
       status: 'success',
       duration: 3000,
       isClosable: true,
@@ -88,7 +88,7 @@ export const Wishlist: React.FC = () => {
       {wishlist.length > 0 ? (
         wishlist.map((product) => (
           <Box
-            key={product.id}
+            key={product._id}
             borderWidth="1px"
             borderRadius="lg"
             overflow="hidden"
@@ -100,8 +100,8 @@ export const Wishlist: React.FC = () => {
           >
             <HStack spacing={4} alignItems="flex-start">
               <Image
-                src={product.imageUrl}
-                alt={product.name}
+                src={`https://linkorg-voip.vercel.app/${product.img}`}
+                alt={product.title}
                 boxSize="120px"
                 borderRadius="md"
                 objectFit="cover"
@@ -109,7 +109,7 @@ export const Wishlist: React.FC = () => {
               <VStack align="start" flex="1" spacing={2}>
                 <HStack>
                   <Text fontSize="lg" fontWeight="bold" color="gray.800">
-                    {product.name}
+                    {product.title}
                   </Text>
                   {product.isNew && (
                     <Badge colorScheme="green" ml={2}>
@@ -134,7 +134,7 @@ export const Wishlist: React.FC = () => {
                   colorScheme="red"
                   size="sm"
                   variant="outline"
-                  onClick={() => handleRemoveFromWishlist(product.id)}
+                  onClick={() => handleRemoveFromWishlist(product._id)}
                   leftIcon={<FaTrash />}
                   _hover={{ bg: 'red.100' }}
                 >

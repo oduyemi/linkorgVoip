@@ -32,7 +32,7 @@ export const TopBar: React.FC = () => {
             </Menu>
 
             {/* Currency Dropdown */}
-            <Menu>
+            {/* <Menu>
               <MenuButton as={Button} size="sm" bg="gray.100" mx={2} rightIcon={<ChevronDownIcon />}>
                 USD
               </MenuButton>
@@ -41,7 +41,7 @@ export const TopBar: React.FC = () => {
                 <MenuItem>GBP</MenuItem>
                 <MenuItem>CAD</MenuItem>
               </MenuList>
-            </Menu>           
+            </Menu>            */}
           </Flex>
 
           {/* Heart and Cart Icons for Mobile */}

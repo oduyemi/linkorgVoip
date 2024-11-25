@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { UserContext } from "../usercontext";
 import {
   Box,
   Flex,
@@ -9,9 +10,11 @@ import {
   VStack,
   useDisclosure,
 } from '@chakra-ui/react';
-import { FaBars, FaAngleDown, FaHeart, FaShoppingCart } from 'react-icons/fa';
+import { LogOut } from "../components/Logout";
+import { FaUserCircle, FaBars, FaAngleDown, FaHeart, FaShoppingCart } from 'react-icons/fa';
 
 export const NavMenu: React.FC = () => {
+  const { user } = useContext(UserContext);
   const { isOpen, onToggle } = useDisclosure();
 
   return (
@@ -39,8 +42,6 @@ export const NavMenu: React.FC = () => {
             </HStack>
             <FaAngleDown />
           </Box>
-
-          {/* Dropdown items for VoIP Hardware */}
           {isOpen && (
             <Box
               mt={2}
@@ -89,6 +90,7 @@ export const NavMenu: React.FC = () => {
                 <Link href="/packages" className="nav-item nav-link">Packages</Link>
               </Flex>
               <HStack spacing={4} className="navbar-nav ml-auto py-0 d-none d-lg-block">
+                <Flex justifyContent="space-between">
                 <Link className="btn px-0" href="/wishlist">
                   <FaHeart className="text-white" />
                   <span className="badge text-white border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
@@ -97,6 +99,18 @@ export const NavMenu: React.FC = () => {
                   <FaShoppingCart className="text-white" />
                   <span className="badge text-white border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
                 </Link>
+                  {user ? (
+                    <HStack spacing={3} align="center">
+                      <Text className="d-inline">Hi {user && user.firstName}</Text>
+                      <Link href="/profile">
+                        <FaUserCircle color="#ffffff" height="20px" width="20px" />
+                      </Link>
+                      <LogOut />
+                    </HStack>
+                  ) : (
+                    <></>
+                  )}
+                </Flex>
               </HStack>
             </Flex>
           </Flex>

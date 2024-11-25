@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { UserContext } from '../../usercontext'; 
+import { UserContext } from '../../usercontext';
 import {
   Box,
   Button,
@@ -16,15 +16,21 @@ import {
   IconButton,
   InputGroup,
   InputRightElement,
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
 } from '@chakra-ui/react';
 import { FaGoogle, FaFacebook } from 'react-icons/fa';
 import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 export const LoginForm: React.FC = () => {
   const { handleLogin, flashMessage } = useContext(UserContext);
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
@@ -41,7 +47,7 @@ export const LoginForm: React.FC = () => {
 
     if (success) {
       const requestedPath = localStorage.getItem('requestedPath');
-      window.location.href = requestedPath || '/dashboard';
+      navigate(requestedPath || '/dashboard');
     }
   };
 
@@ -76,6 +82,14 @@ export const LoginForm: React.FC = () => {
           <Heading as="h2" mb={6} textAlign="center" color="#010156">
             Login to Your Account
           </Heading>
+
+          {flashMessage && (
+            <Alert status={flashMessage.type} mb={4}>
+              <AlertIcon />
+              <AlertTitle>{flashMessage.type === 'success' ? 'Success!' : 'Error'}</AlertTitle>
+              <AlertDescription>{flashMessage.message}</AlertDescription>
+            </Alert>
+          )}
 
           <form onSubmit={handleSubmit}>
             <Stack spacing={4}>
