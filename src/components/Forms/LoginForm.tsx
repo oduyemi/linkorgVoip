@@ -21,7 +21,7 @@ import {
   AlertTitle,
   AlertDescription,
 } from '@chakra-ui/react';
-import { FaGoogle, FaFacebook } from 'react-icons/fa';
+// import { FaGoogle, FaFacebook } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 
@@ -157,7 +157,7 @@ export const LoginForm: React.FC = () => {
             </Link>
           </HStack>
 
-          <Divider my={6} />
+          {/* <Divider my={6} />
 
           <Text fontSize="lg" textAlign="center" mb={2}>
             Or login with
@@ -180,7 +180,7 @@ export const LoginForm: React.FC = () => {
               variant="outline"
               isRound
             />
-          </HStack>
+          </HStack> */}
         </motion.div>
       </Box>
     </VStack>

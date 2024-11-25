@@ -296,12 +296,12 @@ export const RegisterForm: React.FC = () => {
           </form>
 
           <HStack justify="space-between" mt={4}>
-            <Link color="#010156" style={{fontSize: "12px" }} href="/login">
+            <Link color="#010156" style={{fontSize: "12px" }} className="mx-auto" href="/login">
               Already have an account? Login
             </Link>
           </HStack>
 
-          <Divider my={6} />
+          {/* <Divider my={6} />
 
           <Text fontSize="lg" textAlign="center" mb={2}>
             Or register with
@@ -324,7 +324,7 @@ export const RegisterForm: React.FC = () => {
               variant="outline"
               isRound
             />
-          </HStack>
+          </HStack> */}
         </motion.div>
       </Box>
     </VStack>
