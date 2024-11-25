@@ -9,13 +9,10 @@ import {
   Heading,
   useToast,
   VStack,
-  Divider,
-  Text,
   HStack,
   Link,
-  IconButton,
 } from "@chakra-ui/react";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
+// import { FaGoogle, FaFacebook } from "react-icons/fa";
 import { motion } from "framer-motion";
 
 const validateEmail = (email: string): boolean => {

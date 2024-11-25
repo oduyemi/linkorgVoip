@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Container,
@@ -11,9 +11,74 @@ import {
   Textarea,
   Button,
   useBreakpointValue,
+  useToast, // For displaying success/error messages
 } from "@chakra-ui/react";
 
+// Define the ContactUs component
 export const ContactUs: React.FC = () => {
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    subject: "",
+    msg: "",
+  });
+
+  const toast = useToast();
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      // Make the POST request to the backend
+      const response = await fetch("https://linkorg-voip.vercel.app/api/v1/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Show success message
+        toast({
+          title: "Message sent.",
+          description: data.message,
+          status: "success",
+          duration: 5000,
+          isClosable: true,
+        });
+      } else {
+        // Show error message
+        toast({
+          title: "Error",
+          description: data.message || "There was an issue sending your message.",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "An error occurred while sending your message.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    }
+  };
+
   return (
     <Box className="site-section" id="section-contact" py={10} bg="gray.50">
       <Container maxW="container.xl">
@@ -34,31 +99,56 @@ export const ContactUs: React.FC = () => {
             border="1px solid"
             borderColor="gray.200"
           >
-            <form action="#">
+            <form onSubmit={handleSubmit}>
               <SimpleGrid columns={{ base: 1, md: 2 }} spacing={5}>
-                <FormControl id="fname" isRequired>
+                <FormControl id="firstName" isRequired>
                   <FormLabel color="gray.800">First Name</FormLabel>
-                  <Input type="text" placeholder="First Name" />
+                  <Input
+                    type="text"
+                    placeholder="First Name"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                  />
                 </FormControl>
-                <FormControl id="lname" isRequired>
+                <FormControl id="lastName" isRequired>
                   <FormLabel color="gray.800">Last Name</FormLabel>
-                  <Input type="text" placeholder="Last Name" />
+                  <Input
+                    type="text"
+                    placeholder="Last Name"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                  />
                 </FormControl>
               </SimpleGrid>
 
               <FormControl id="email" isRequired mt={5}>
                 <FormLabel color="gray.800">Email</FormLabel>
-                <Input type="email" placeholder="johndoe@gmail.com" />
+                <Input
+                  type="email"
+                  placeholder="johndoe@gmail.com"
+                  value={formData.email}
+                  onChange={handleChange}
+                />
               </FormControl>
 
               <FormControl id="subject" isRequired mt={5}>
                 <FormLabel color="gray.800">Subject</FormLabel>
-                <Input type="text" placeholder="Subject" />
+                <Input
+                  type="text"
+                  placeholder="Subject"
+                  value={formData.subject}
+                  onChange={handleChange}
+                />
               </FormControl>
 
-              <FormControl id="message" isRequired mt={5}>
+              <FormControl id="msg" isRequired mt={5}>
                 <FormLabel color="gray.800">Message</FormLabel>
-                <Textarea placeholder="Your message" rows={7} />
+                <Textarea
+                  placeholder="Your message"
+                  rows={7}
+                  value={formData.msg}
+                  onChange={handleChange}
+                />
               </FormControl>
 
               <Button
