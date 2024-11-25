@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Box,
   Flex,
@@ -13,6 +13,8 @@ import {
 } from "@chakra-ui/react";
 import { FaSearch } from "react-icons/fa";
 import axios from "axios";
+import { debounce } from "lodash";
+
 
 export const MidBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -21,11 +23,19 @@ export const MidBar: React.FC = () => {
   const handleSearch = async () => {
     try {
       const response = await axios.get(`https://linkorg-voip.vercel.app/api/v1/products?search=${searchQuery}`);
-      setSearchResults(response.data.data); // Assuming the API response has a `data` field
+      setSearchResults(response.data.data); 
     } catch (error) {
       console.error("Error fetching search results", error);
     }
   };
+  
+  // Debounce search
+  const debouncedSearch = debounce(handleSearch, 500);
+  
+  useEffect(() => {
+    debouncedSearch();
+    return () => debouncedSearch.cancel();
+  }, [searchQuery]);
 
   return (
     <Flex bg="white" py={3} px={{ base: 4, xl: 5 }} display={{ base: "flex", lg: "flex" }}>
