@@ -2,18 +2,14 @@ import React from 'react';
 import { Container, Flex, Heading, Button, chakra, useBreakpointValue } from '@chakra-ui/react';
 import { motion, Transition } from 'framer-motion';
 
-// Create a motion-enabled component
-const MotionBox = chakra(motion.div); // Wrap motion.div with chakra
+const MotionBox = chakra(motion.div); 
 
 interface AdBoxProps {
   backgroundImage: string;
 }
 
 export const AdBox: React.FC<AdBoxProps> = ({ backgroundImage }) => {
-  // Responsive font size for the heading
   const headingFontSize = useBreakpointValue({ base: '2xl', md: '3xl', lg: '4xl' });
-
-  // Define transitions with explicit type
   const fadeTransition: Transition = {
     duration: 0.5,
     ease: 'easeInOut',
@@ -39,7 +35,7 @@ export const AdBox: React.FC<AdBoxProps> = ({ backgroundImage }) => {
       bgPos="center"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: fadeTransition.duration, ease: fadeTransition.ease }} // Adjusted to meet type expectations
+      transition={{ duration: fadeTransition.duration, ease: fadeTransition.ease }} 
     >
       <Container maxW="container.xl">
         <Flex align="center" justify="center" flexDirection="column" textAlign="center">
@@ -61,7 +57,7 @@ export const AdBox: React.FC<AdBoxProps> = ({ backgroundImage }) => {
           >
             <Button
               as="a"
-              href="https://untree.co/"
+              href="/packages"
               rel="noopener noreferrer"
               colorScheme="orange"
               variant="solid"

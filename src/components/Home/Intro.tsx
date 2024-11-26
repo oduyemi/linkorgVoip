@@ -104,7 +104,7 @@ export const Intro: React.FC = () => {
               <Text mb={4} fontSize="lg" color="gray.700">
                 VoIP Account from Linkorg Voip. Available internet access (any reliable internet with no active block on VoIP is adequate). Phone – hard phone and/or soft phone app, which can be installed on Windows laptop/desktop, Android devices, or iPhones.
               </Text>
-              <Button as="a" href="/about" colorScheme="orange" variant="solid" size="lg">
+              <Button as="a" href="/packages" colorScheme="orange" variant="solid" size="lg">
                 See Packages
               </Button>
             </MotionBox>
