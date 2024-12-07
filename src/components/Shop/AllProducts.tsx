@@ -10,20 +10,8 @@ import {
   useBreakpointValue,
   Image,
   VStack,
-  Spinner,
-  Checkbox,
-  Stack,
-  Badge,
-  Slider,
-  SliderTrack,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderMark,
-  InputGroup,
-  InputLeftAddon,
-  Input,
-  HStack,
-} from "@chakra-ui/react";
+  Spinner
+  } from "@chakra-ui/react";
 import {
   FaThLarge,
   FaBars,
