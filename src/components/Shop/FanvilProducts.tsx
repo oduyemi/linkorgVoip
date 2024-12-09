@@ -49,7 +49,7 @@ export const FanvilProducts: React.FC<FanvilProductsProps> = ({ priceRange, prod
       price: product.price,
       quantity: 1,
     };
-    addToCart(cartProduct);
+    // addToCart(cartProduct);
   };
 
   if (loading) {

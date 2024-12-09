@@ -49,7 +49,7 @@ export const CiscoProducts: React.FC<CiscoProductsProps> = ({ priceRange, produc
       price: product.price,
       quantity: 1,
     };
-    addToCart(cartProduct);
+    // addToCart(cartProduct);
   };
 
   if (loading) {

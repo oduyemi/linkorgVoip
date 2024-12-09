@@ -16,13 +16,15 @@ import FAQ from "./pages/FAQ";
 import Contact from "./pages/Contact";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-// import ToCart from "./pages/AddToCart";
+import CartPage from "./pages/CartPage";
 import WishList from "./pages/Wishlist";
 import PayOptions from "./pages/PayOptions";
 import PaystackPage from "./pages/Paystack";
 import UserDashboard from "./pages/Dashboard";
 import { CartProvider } from "./components/Cart/CartContext";
 import { LogOut } from "./components/Logout";
+import Checkout from "./pages/Checkout";
+import Pay from "./pages/Pay";
 
 const App: React.FC = () => {
     return (
@@ -47,10 +49,11 @@ const App: React.FC = () => {
                             <Route path="/fanvil" element={<FanvilStore />} />
                             <Route path="/cisco" element={<CiscoStore />} />
                             {/* <Route path="/add-to-cart" element={<ToCart />} /> */}
-                            {/* <Route path="/cart" element={<Cart />} /> */}
+                            <Route path="/cart" element={<CartPage />} />
+                            <Route path="/checkout" element={<Checkout />} />
                             <Route path="/wishlist" element={<WishList />} />
                             <Route path="/payment-option" element={<PayOptions />} />
-                            <Route path="payment/paystack" element={<PaystackPage />} />
+                            <Route path="/pay" element={<Pay />} />
                             <Route path="*" element={<Error404 />} />
                         </Routes>
                     </BrowserRouter>

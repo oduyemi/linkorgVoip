@@ -69,7 +69,7 @@ export const AllProducts: React.FC<AllProductsProps> = ({ priceRange, products }
       price: product.price,
       quantity: 1,
     };
-    addToCart(cartProduct);
+    // addToCart(cartProduct);
   };
 
   if (loading) {

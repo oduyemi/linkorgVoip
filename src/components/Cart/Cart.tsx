@@ -1,59 +1,22 @@
-import React, { useState } from 'react';
-import { Button, useToast, Box, Text, Flex, Stack, IconButton } from '@chakra-ui/react';
-import { FaTrashAlt } from 'react-icons/fa'; 
+import React from 'react';
+import { Button, useToast, Box, Text, Flex, Stack, IconButton, Link } from '@chakra-ui/react';
+import { FaTrashAlt } from 'react-icons/fa';
+import { useCart } from './CartContext'; // Import the useCart hook
 
-// Define types for cart item
-interface CartItem {
-  id: string;
-  productName: string;
-  productPrice: number;
-  productImage: string;
-  quantity: number;
-}
-
-// Define Cart component
-const Cart: React.FC = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    {
-      id: '1',
-      productName: 'Wireless Headphones',
-      productPrice: 149.99,
-      productImage: 'https://via.placeholder.com/150',
-      quantity: 1,
-    },
-    {
-      id: '2',
-      productName: 'Bluetooth Speaker',
-      productPrice: 89.99,
-      productImage: 'https://via.placeholder.com/150',
-      quantity: 2,
-    },
-  ]);
+export const Cart: React.FC = () => {
+  const { cartItems, removeFromCart, addToCart } = useCart(); // Use the context
   const toast = useToast();
 
-  // Handle increasing quantity
   const handleIncreaseQuantity = (id: string) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    );
+    addToCart({ id, title: '', price: 0, quantity: 1, img: '' }); // Custom logic to increase quantity
   };
 
-  // Handle decreasing quantity
   const handleDecreaseQuantity = (id: string) => {
-    setCartItems((prevItems) =>
-      prevItems.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    );
+    addToCart({ id, title: '', price: 0, quantity: -1, img: '' }); // Custom logic to decrease quantity
   };
 
-  // Handle removing item from cart
   const handleRemoveItem = (id: string) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+    removeFromCart(id);
     toast({
       title: 'Item Removed!',
       description: 'The item has been removed from your cart.',
@@ -63,9 +26,8 @@ const Cart: React.FC = () => {
     });
   };
 
-  // Calculate total price
   const calculateTotal = () => {
-    return cartItems.reduce((total, item) => total + item.productPrice * item.quantity, 0);
+    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
   return (
@@ -91,14 +53,14 @@ const Cart: React.FC = () => {
               <Flex align="center" justify="space-between">
                 <Flex align="center">
                   <Box boxSize="100px">
-                    <img src={item.productImage} alt={item.productName} />
+                    <img src={item.img} alt={item.title} />
                   </Box>
                   <Box ml={4}>
                     <Text fontSize="xl" fontWeight="bold">
-                      {item.productName}
+                      {item.title}
                     </Text>
                     <Text color="gray.600">
-                      ${item.productPrice.toFixed(2)} each
+                    &#163;{item.price.toFixed(2)} each
                     </Text>
                   </Box>
                 </Flex>
@@ -134,7 +96,7 @@ const Cart: React.FC = () => {
               </Flex>
               <Flex justify="space-between" mt={4}>
                 <Text fontSize="lg" fontWeight="bold">
-                  Subtotal: ${(item.productPrice * item.quantity).toFixed(2)}
+                  Subtotal: &#163;{(item.price * item.quantity).toFixed(2)}
                 </Text>
               </Flex>
             </Box>
@@ -145,20 +107,20 @@ const Cart: React.FC = () => {
       {/* Total Price and Checkout Section */}
       <Box mt={6} p={4} bg="gray.50" borderRadius="md" boxShadow="sm">
         <Flex justify="space-between" align="center" mb={4}>
-          <Text fontSize="2xl" fontWeight="bold">
-            Total: ${calculateTotal().toFixed(2)}
+          <Text fontSize="2xl" fontWeight="bold" className="blutext">
+            Total: &#163;{calculateTotal().toFixed(2)}
           </Text>
-          <Button
-            colorScheme="orange"
-            size="lg"
-            onClick={() => toast({ title: 'Proceeding to Checkout', status: 'info' })}
-          >
-            Proceed to Checkout
-          </Button>
+          <Link href="/checkout">
+            <Button
+              colorScheme="orange"
+              size="lg"
+              onClick={() => toast({ title: 'Proceeding to Checkout', status: 'info' })}
+            >
+              Proceed to Checkout
+            </Button>
+          </Link>
         </Flex>
       </Box>
     </Box>
   );
 };
-
-export default Cart;

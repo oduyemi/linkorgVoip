@@ -49,7 +49,7 @@ export const GrandstreamProducts: React.FC<GrandstreamProductsProps> = ({ priceR
       price: product.price,
       quantity: 1,
     };
-    addToCart(cartProduct);
+    // addToCart(cartProduct);
   };
 
   if (loading) {

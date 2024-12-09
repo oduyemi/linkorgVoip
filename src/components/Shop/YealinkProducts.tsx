@@ -49,7 +49,7 @@ export const YealinkProducts: React.FC<YealinkProductsProps> = ({ priceRange, pr
       price: product.price,
       quantity: 1,
     };
-    addToCart(cartProduct);
+    // addToCart(cartProduct);
   };
 
   if (loading) {
