@@ -53,7 +53,7 @@ const App: React.FC = () => {
                             <Route path="/checkout" element={<Checkout />} />
                             <Route path="/wishlist" element={<WishList />} />
                             <Route path="/payment-option" element={<PayOptions />} />
-                            <Route path="/pay" element={<Pay />} />
+                            <Route path="/payment" element={<Pay />} />
                             <Route path="*" element={<Error404 />} />
                         </Routes>
                     </BrowserRouter>
