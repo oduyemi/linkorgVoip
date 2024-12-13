@@ -5,6 +5,7 @@ import {
   Flex,
   Heading,
   Image,
+  Link,
   Text,
   VStack,
   chakra
@@ -103,9 +104,11 @@ export const Banner: React.FC = () => {
                       {item.title}
                     </Heading>
                     <Text>{item.description}</Text>
-                    <Button colorScheme="orange" variant="outline" mt={3}>
-                      Shop Now
-                    </Button>
+                    <Link href="/shop">
+                      <Button colorScheme="orange" variant="outline" mt={3}>
+                        Shop Now
+                      </Button>
+                    </Link>
                   </VStack>
                 </Flex>
               </MotionBox>
@@ -140,7 +143,7 @@ export const Banner: React.FC = () => {
               >
                 <Text fontSize="sm" color="white" textTransform="uppercase">Save 20%</Text>
                 <Heading as="h3" size="lg" color="white" mb={3}>Special Offer</Heading>
-                <Button colorScheme="orange">Shop Now</Button>
+                <Link href="/shop"><Button colorScheme="orange">Shop Now</Button></Link>
               </Flex>
             </MotionBox>
           ))}

@@ -102,7 +102,7 @@ const PlanCard: React.FC<PlanCardProps> = ({ plan, isHovered, setHovered }) => (
       {plan.title}
     </Text>
     <Box mb={3}>
-      <Text fontSize="xl" fontWeight="bold" className="d-inline">${plan.monthlyPrice}</Text>
+      <Text fontSize="xl" fontWeight="bold" className="d-inline">&#163;{plan.monthlyPrice}</Text>
       <Text fontSize="sm" className="d-inline"> /month</Text>
     </Box>
     <List spacing={2} color={isHovered ? 'white' : 'gray.700'} mb={4}>

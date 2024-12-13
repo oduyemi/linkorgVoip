@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom';
-import { Button, Box, Text } from '@chakra-ui/react';
+import { Button, Box, Text, Link } from '@chakra-ui/react';
 
 const stripePromise = loadStripe("pk_live_51QIQGdP8MdHf1E0aoaEz6vArMtkofrdwKbpF66LedwC7g1JW7M8q0awmMGEAluKp3mr7IBWYnMyuvKHSRJGW2P3000tJSAaUYj");
 
@@ -84,9 +84,11 @@ export const Payment: React.FC = () => {
         {/* Include Stripe Payment Form Component */}
         {/* After payment success, call handlePaymentSuccess */}
       </Elements>
-      <Button onClick={handlePaymentSuccess} colorScheme="green">
-        Complete Payment
-      </Button>
+      <Link href="https://buy.stripe.com/3cs3e63qRa1A0ne144">
+        <Button onClick={handlePaymentSuccess} colorScheme="green">
+          Complete Payment
+        </Button>
+      </Link>
     </Box>
   );
 };
