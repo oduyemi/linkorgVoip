@@ -38,7 +38,6 @@ export const FeaturedProducts: React.FC = () => {
     fetchProducts();
   }, []);
 
-  // Function to get random products
   const getRandomProducts = (products: Product[], count: number) => {
     const shuffled = [...products].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
@@ -67,7 +66,7 @@ export const FeaturedProducts: React.FC = () => {
         {products.map((product) => (
           <Box key={product._id} bg="gray.50" p={5} shadow="md" borderWidth="1px" borderRadius="lg">
             <Box position="relative" overflow="hidden">
-              <Image src={product.img} alt={product.webname} borderRadius="sm" className="img-responsive" />
+              <Image src={product.img} alt={product.webname} borderRadius="sm" className="img-responsive mb-3" />
               <Flex position="relative" top="0.5" left="14">
               <IconButton 
                 aria-label="Add to cart" 
@@ -75,6 +74,7 @@ export const FeaturedProducts: React.FC = () => {
                 icon={<FaShoppingCart />} 
                 variant="outline" 
                 colorScheme="gray" 
+                className="mb-3"
                 size="sm" 
                 _hover={{ color: "black", borderColor: "black" }}
                 _active={{ color: "#e65d0f", borderColor: "#e65d0f" }}
@@ -106,7 +106,6 @@ export const FeaturedProducts: React.FC = () => {
               <Text fontWeight="semibold" noOfLines={1}>{product.description}</Text>
               <HStack>
                 <Text fontSize="lg" fontWeight="bold">${product.price}</Text>
-                <Text as="del" fontSize="sm" color="gray.500">${product.price}</Text>
               </HStack>
             </Stack>
           </Box>
