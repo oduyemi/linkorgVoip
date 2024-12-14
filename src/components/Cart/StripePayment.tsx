@@ -4,7 +4,7 @@ import { CardElement, useStripe, useElements, Elements } from '@stripe/react-str
 import { Box, Button, VStack, useToast, Spinner, Text } from '@chakra-ui/react';
 
 
-const stripePromise = loadStripe('YOUR_STRIPE_PUBLIC_KEY'); // Replace with your Stripe public key
+const stripePromise = loadStripe('pk_live_51QIQGdP8MdHf1E0aoaEz6vArMtkofrdwKbpF66LedwC7g1JW7M8q0awmMGEAluKp3mr7IBWYnMyuvKHSRJGW2P3000tJSAaUYj'); 
 
 
 

@@ -1,7 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext, useRef } from "react";
+import { UserContext } from "../../usercontext";
+import { v4 as uuidv4 } from "uuid";
 import { useCart } from "../Cart/CartContext";
-import { Box, Container, Grid, Heading, Image, Text, Stack, IconButton, Flex, HStack } from "@chakra-ui/react";
-import { FaShoppingCart, FaHeart, FaSyncAlt, FaSearch, FaStar, FaStarHalfAlt } from "react-icons/fa";
+import {
+  Box,
+  Container,
+  Grid,
+  Heading,
+  Image,
+  Text,
+  Stack,
+  IconButton,
+  Flex,
+  useToast,
+  Skeleton,
+} from "@chakra-ui/react";
+import { FaShoppingCart, FaHeart, FaSearch } from "react-icons/fa";
 import axios from "axios";
 
 interface Product {
@@ -11,102 +25,216 @@ interface Product {
   img: string;
   price: number;
   description: string;
-  webname: string;
+  webName: string;
 }
 
 export const FeaturedProducts: React.FC = () => {
+  const { user } = useContext(UserContext);
+  const [userIP, setUserIP] = useState<string | null>(null);
+  const guestID = useRef<string>(uuidv4());
   const { addToCart } = useCart();
   const [products, setProducts] = useState<Product[]>([]);
-  const [error, setError] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+  const toast = useToast();
 
+  // FETCH USER IP
+  useEffect(() => {
+    const fetchIP = async () => {
+      try {
+        const response = await fetch("https://api64.ipify.org?format=json");
+        const data = await response.json();
+        setUserIP(data.ip);
+      } catch (err) {
+        console.error("Failed to fetch IP:", err);
+        setUserIP("unknown");
+      }
+    };
+
+    fetchIP();
+  }, []);
+
+// FETCH PRODUCTS
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('https://linkorg-voip.vercel.app/api/v1/products');
-        console.log(response.data.data);
+        const response = await axios.get(
+          "https://linkorg-voip.vercel.app/api/v1/products"
+        );
         if (Array.isArray(response.data.data)) {
-          const randomProducts = getRandomProducts(response.data.data, 4);
-          setProducts(randomProducts);
+          setProducts(getRandomProducts(response.data.data, 4));
         } else {
-          setError('Unexpected data format');
+          setError("Unexpected data format");
         }
       } catch (err) {
-        setError('Error fetching products');
+        setError("Error fetching products");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
   }, []);
 
+  // RANDOM PRODUCTS
   const getRandomProducts = (products: Product[], count: number) => {
-    const shuffled = [...products].sort(() => Math.random() - 0.5);
-    return shuffled.slice(0, count);
+    const selected = new Set<number>();
+    while (selected.size < Math.min(count, products.length)) {
+      selected.add(Math.floor(Math.random() * products.length));
+    }
+    return Array.from(selected).map((index) => products[index]);
   };
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = async (product: Product) => {
+    const cartKey = user ? `cart-${user._id}` : `cart-${userIP || "guest"}`;
     const cartProduct = {
       id: product._id,
-      title: product.title,
+      title: product.webName,
       price: product.price,
-      quantity: 1,
       img: product.img,
+      quantity: 1,
     };
-    addToCart(cartProduct);
-  };
+  
+    try {
+      if (user) {
+        // User is logged in
+        const response = await axios.post(
+          "https://linkorg-voip.vercel.app/api/v1/cart/add",
+          {
+            userId: user._id,
+            productId: product._id,
+            quantity: 1,
+          },
+          { headers: { Authorization: `Bearer ${user.token}` } } 
+        );
+  
+        if (response.status === 200) {
+          toast({
+            title: "Success!",
+            description: response.data.message || "Product added to cart.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        } else {
+          throw new Error("Unexpected API response");
+        }
+      } else {
+        // User is not logged in, fallback to local storage
+        const currentCart = JSON.parse(localStorage.getItem(cartKey) || "[]");
+        const existingIndex = currentCart.findIndex(
+          (item: Product) => item._id === product._id
+        );
+  
+        if (existingIndex > -1) {
+          currentCart[existingIndex].quantity += 1;
+        } else {
+          currentCart.push(cartProduct);
+        }
+  
+        localStorage.setItem(cartKey, JSON.stringify(currentCart));
+        toast({
+          title: "Added to Cart",
+          description: "Log in to sync with your account.",
+          status: "info",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error adding to cart:", error); // Log the error
+      toast({
+        title: "Error",
+        description: "Could not add product to cart. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  }
+  if (loading) {
+    return (
+      <Container maxW="container.xl" py={10}>
+        <Heading as="h2" fontSize="2xl" textAlign="center" mb={6}>
+          Featured Products
+        </Heading>
+        <Grid
+          templateColumns={{
+            base: "repeat(1, 1fr)",
+            sm: "repeat(2, 1fr)",
+            md: "repeat(3, 1fr)",
+            lg: "repeat(4, 1fr)",
+          }}
+          gap={6}
+        >
+          {[...Array(4)].map((_, index) => (
+            <Skeleton key={index} height="300px" />
+          ))}
+        </Grid>
+      </Container>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box textAlign="center" color="red.500" mt={4}>
+        {error}
+      </Box>
+    );
+  }
 
   return (
     <Container maxW="container.xl" py={10}>
-      <Heading as="h2" fontSize="2xl" textAlign="center" className="blutext" mb={6} borderBottom="2px" borderColor="gray.200" pb={2}>
+      <Heading as="h2" fontSize="2xl" className="blutext" textAlign="center" mb={6}>
         Featured Products
       </Heading>
-      <Grid 
-        templateColumns={{ base: "repeat(1, 1fr)", sm: "repeat(2, 1fr)", md: "repeat(3, 1fr)", lg: "repeat(4, 1fr)" }} 
+      <Grid
+        templateColumns={{
+          base: "repeat(1, 1fr)",
+          sm: "repeat(2, 1fr)",
+          md: "repeat(3, 1fr)",
+          lg: "repeat(4, 1fr)",
+        }}
         gap={6}
       >
         {products.map((product) => (
           <Box key={product._id} bg="gray.50" p={5} shadow="md" borderWidth="1px" borderRadius="lg">
             <Box position="relative" overflow="hidden">
-              <Image src={product.img} alt={product.webname} borderRadius="sm" className="img-responsive mb-3" />
-              <Flex position="relative" top="0.5" left="14">
-              <IconButton 
-                aria-label="Add to cart" 
-                onClick={() => handleAddToCart(product)} 
-                icon={<FaShoppingCart />} 
-                variant="outline" 
-                colorScheme="gray" 
-                className="mb-3"
-                size="sm" 
-                _hover={{ color: "black", borderColor: "black" }}
-                _active={{ color: "#e65d0f", borderColor: "#e65d0f" }}
-              />
-              <IconButton 
-                aria-label="Add to wishlist" 
-                icon={<FaHeart />} 
-                variant="outline" 
-                colorScheme="red" 
-                size="sm" 
-                ml={2} 
-                _hover={{ color: "black", borderColor: "black" }}
-                _active={{ color: "#e65d0f", borderColor: "#e65d0f" }}
-              />
-
-              <IconButton 
-                aria-label="View details" 
-                icon={<FaSearch />} 
-                variant="outline" 
-                colorScheme="gray" 
-                size="sm" 
-                ml={2} 
-                _hover={{ color: "black", borderColor: "black" }}
-                _active={{ color: "#e65d0f", borderColor: "#e65d0f" }}
-              />
+              <Image src={product.img} alt={product.title} borderRadius="sm" />
+              <Flex mt={2} justify="center">
+                <IconButton
+                  aria-label="Add to cart"
+                  onClick={() => handleAddToCart(product)}
+                  icon={<FaShoppingCart />}
+                  variant="outline"
+                  colorScheme="gray"
+                  size="sm"
+                />
+                <IconButton
+                  aria-label="Add to wishlist"
+                  icon={<FaHeart />}
+                  variant="outline"
+                  colorScheme="red"
+                  size="sm"
+                  ml={2}
+                />
+                <IconButton
+                  aria-label="View details"
+                  icon={<FaSearch />}
+                  variant="outline"
+                  colorScheme="gray"
+                  size="sm"
+                  ml={2}
+                />
               </Flex>
             </Box>
             <Stack mt={4} spacing={2} align="center">
-              <Text fontWeight="semibold" noOfLines={1}>{product.description}</Text>
-              <HStack>
-                <Text fontSize="lg" fontWeight="bold">${product.price}</Text>
-              </HStack>
+              <Text fontWeight="semibold" noOfLines={1}>
+                {product.description}
+              </Text>
+              <Text fontSize="lg" fontWeight="bold">
+              &#163;{product.price.toFixed(2)}
+              </Text>
             </Stack>
           </Box>
         ))}

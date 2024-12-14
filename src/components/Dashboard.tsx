@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import { UserContext } from '../usercontext';
+import { v4 as uuidv4 } from "uuid";
+import { useCart } from './Cart/CartContext';
 import {
   Box,
   VStack,
@@ -7,7 +9,6 @@ import {
   Text,
   SimpleGrid,
   Image,
-  Divider,
   Button,
   Spinner,
   useBreakpointValue,
@@ -17,11 +18,13 @@ import Slider from 'react-slick';
 import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios'; 
 
+
 interface Product {
   _id: string;
   title: string;
-  price: string;
+  price: number;
   img: string;
+  webName: string
 }
 
 interface FlashMessage {
@@ -31,6 +34,9 @@ interface FlashMessage {
 
 export const Dashboard: React.FC = () => {
   const { user } = useContext(UserContext);
+  const [userIP, setUserIP] = useState<string | null>(null);
+  const guestID = useRef<string>(uuidv4());
+  const { addToCart } = useCart();
   const navigate = useNavigate();
   const toast = useToast();
   const [productSuggestions, setProductSuggestions] = useState<Product[]>([]);
@@ -79,6 +85,82 @@ export const Dashboard: React.FC = () => {
       });
     }
   }, [user]);
+
+// FETCH USER IP
+useEffect(() => {
+  const fetchIP = async () => {
+    try {
+      const response = await fetch("https://api64.ipify.org?format=json");
+      const data = await response.json();
+      setUserIP(data.ip);
+    } catch (error) {
+      console.error("Failed to fetch IP:", error);
+      setUserIP("unknown");
+    }
+  };
+
+  fetchIP();
+}, []);
+
+  // ADD TO CART
+  const handleAddToCart = async (product: Product) => {
+    const cartKey = user ? `cart-${userDetails.id}` : `cart-${userIP || "guest"}`;
+    const cartProduct = { 
+      id: product._id, 
+      title: product.title, 
+      price: product.price, 
+      img: product.img, 
+      quantity: 1 
+    };
+  
+    try {
+      if (user) {
+        const response = await axios.post(
+          "https://linkorg-voip.vercel.app/api/v1/cart/add",
+          { userId: user._id, productId: product._id, quantity: 1 },
+          { headers: { Authorization: `Bearer ${user.token}` } }
+        );
+        toast({ 
+          title: "Success!", 
+          description: response.data.message, 
+          status: "success", 
+          duration: 3000, 
+          isClosable: true 
+        });
+      } else {
+        const currentCart = JSON.parse(localStorage.getItem(cartKey) || "[]");
+        const updatedCart = [...currentCart, cartProduct];
+        localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+        toast({ 
+          title: "Added to Cart", 
+          description: "Log in to sync with your account.", 
+          status: "info", 
+          duration: 3000, 
+          isClosable: true 
+        });
+      }
+    } catch (error) {
+      toast({ 
+        title: "Error", 
+        description: "Could not add product to cart. Please try again.", 
+        status: "error", 
+        duration: 3000, 
+        isClosable: true 
+      });
+    }
+  };
+  
+
+  useEffect(() => {
+    const savedCartItems = JSON.parse(localStorage.getItem('cartItems') || '[]');
+    setCartItems(savedCartItems);
+  }, []);
+
+  useEffect(() => {
+    if (cartItems.length > 0) {
+      localStorage.setItem('cartItems', JSON.stringify(cartItems));
+    }
+  }, [cartItems]);
   
 
   // Fetch product suggestions
@@ -96,53 +178,7 @@ export const Dashboard: React.FC = () => {
       }
     };
     fetchProducts();
-  }, []);
-
-  const handleAddToCart = async (productId: string) => {
-    if (!user || !user._id) {
-      toast({
-        title: "Error!",
-        description: "User information is missing. Please log in.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-      return;
-    }
-  
-    const userId = user._id;
-    const quantity = 1;
-  
-    try {
-      const response = await axios.post(
-        'https://linkorg-voip.vercel.app/api/v1/cart/add',
-        { userId, productId, quantity },
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      );
-  
-      toast({
-        title: "Success!",
-        description: response.data.message || "Product added to cart successfully.",
-        status: "success",
-        duration: 3000,
-        isClosable: true,
-      });
-    } catch (error: any) {
-      const errorMessage = error.response?.data?.message || "Unable to add product to cart. Please try again later.";
-      console.error("Failed to add to cart:", error);
-      toast({
-        title: "Error!",
-        description: errorMessage,
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+  }, []);  
 
   const fetchWishlist = async () => {
     setLoadingWishlist(true);
@@ -201,7 +237,7 @@ export const Dashboard: React.FC = () => {
         duration: 3000,
         isClosable: true,
       });
-      fetchWishlist(); // Refresh wishlist
+      fetchWishlist(); 
     } catch (error) {
       console.error('Failed to remove from wishlist:', error);
       toast({
@@ -247,14 +283,14 @@ export const Dashboard: React.FC = () => {
                   transition="all 0.3s ease-in-out"
                 >
                   <Image
-                    src={`https://linkorg-voip.vercel.app/${item.img}`}
+                    src={`${item.img}`}
                     alt={item.title}
                     height="200px"
                     borderRadius="md"
                     className="mx-auto"
                   />
                   <Heading mt={4} fontSize="md" fontWeight="medium" className="blutext">
-                    {item.title}
+                    {`${item.webName}`}
                   </Heading>
                   <Text fontSize="sm" color="gray.700">
                     £{item.price}
@@ -263,7 +299,7 @@ export const Dashboard: React.FC = () => {
                     mt={4}
                     colorScheme="orange"
                     size="sm"
-                    onClick={() => handleAddToCart(item._id)}
+                    onClick={() => handleAddToCart(item)} 
                     _hover={{ bg: '#010156' }}
                   >
                     Add to Cart
@@ -308,7 +344,7 @@ export const Dashboard: React.FC = () => {
           <SimpleGrid columns={gridColumns} spacing={6} mt={4}>
             {wishlistItems.map((item) => (
               <Box key={item._id} borderWidth={1} p={4} bg="white" boxShadow="md">
-                <Image src={item.img} alt={item.title} />
+                <Image src={`https://linkorg-voip.vercel.app/${item.img}`} alt={item.title} />
                 <Text>{item.title}</Text>
                 <Text>{item.price}</Text>
                 <Button

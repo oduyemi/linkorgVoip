@@ -6,7 +6,7 @@ export interface CartItem {
   title: string;
   price: number;
   quantity: number;
-  img?: string;
+  img: string;
 }
 
 interface CartContextType {
@@ -20,10 +20,11 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [cartCount, setCartCount] = useState<number>(0);
   const [userIP, setUserIP] = useState<string | null>(null);
 
+  // Fetch user IP address for guest cart handling
   useEffect(() => {
-    // Fetch the user's IP address
     const fetchIP = async () => {
       try {
         const response = await axios.get("https://api.ipify.org?format=json");
@@ -32,51 +33,61 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
         console.error("Error fetching IP address:", error);
       }
     };
-    
+
     fetchIP();
   }, []);
 
+  // Load cart from localStorage on component mount
   useEffect(() => {
-    if (userIP) {
-      // Retrieve cart items from localStorage using the IP address as key
-      const storedCart = localStorage.getItem(`cart-${userIP}`);
-      if (storedCart) {
-        setCartItems(JSON.parse(storedCart));
-      }
+    const cartKey = userIP ? `cart-${userIP}` : "cart-guest";
+    const storedCart = localStorage.getItem(cartKey);
+    if (storedCart) {
+      const parsedCart = JSON.parse(storedCart);
+      setCartItems(parsedCart);
+      setCartCount(parsedCart.reduce((total: number, item: CartItem) => total + item.quantity, 0));
     }
   }, [userIP]);
 
+  // Function to add an item to the cart
   const addToCart = (product: CartItem) => {
     setCartItems((prevCart) => {
       const updatedCart = [...prevCart];
       const existingProduct = updatedCart.find((item) => item.id === product.id);
+
       if (existingProduct) {
         existingProduct.quantity += product.quantity;
       } else {
         updatedCart.push(product);
       }
 
-      // Save updated cart to localStorage using the IP address as key
-      if (userIP) {
-        localStorage.setItem(`cart-${userIP}`, JSON.stringify(updatedCart));
-      }
+      // Update localStorage
+      const cartKey = userIP ? `cart-${userIP}` : "cart-guest";
+      localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+
+      // Update cart count
+      const newCartCount = updatedCart.reduce((total, item) => total + item.quantity, 0);
+      setCartCount(newCartCount);
+
       return updatedCart;
     });
   };
 
+  // Function to remove an item from the cart
   const removeFromCart = (id: string) => {
     setCartItems((prevCart) => {
       const updatedCart = prevCart.filter((item) => item.id !== id);
 
-      // Save updated cart to localStorage using the IP address as key
-      if (userIP) {
-        localStorage.setItem(`cart-${userIP}`, JSON.stringify(updatedCart));
-      }
+      // Update localStorage
+      const cartKey = userIP ? `cart-${userIP}` : "cart-guest";
+      localStorage.setItem(cartKey, JSON.stringify(updatedCart));
+
+      // Update cart count
+      const newCartCount = updatedCart.reduce((total, item) => total + item.quantity, 0);
+      setCartCount(newCartCount);
+
       return updatedCart;
     });
   };
-
-  const cartCount = cartItems.reduce((count, item) => count + item.quantity, 0);
 
   return (
     <CartContext.Provider value={{ cartItems, cartCount, addToCart, removeFromCart }}>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, useToast, Box, Text, Flex, Stack, IconButton, Link } from "@chakra-ui/react";
+import { Button, useToast, Box, Text, Flex, Stack, IconButton, Link, Heading } from "@chakra-ui/react";
 import { FaTrashAlt } from "react-icons/fa";
 import { useCart, CartItem } from "./CartContext";
 
@@ -8,11 +8,11 @@ export const Cart: React.FC = () => {
   const toast = useToast();
 
   const handleIncreaseQuantity = (id: string) => {
-    addToCart({ id, title: "", price: 0, quantity: 1 });
+    addToCart({ id, title: "", img: "", price: 0, quantity: 1 });
   };
 
   const handleDecreaseQuantity = (id: string) => {
-    addToCart({ id, title: "", price: 0, quantity: -1 });
+    addToCart({ id, title: "", img:"", price: 0, quantity: -1 });
   };
 
   const handleRemoveItem = (id: string) => {
@@ -35,7 +35,7 @@ export const Cart: React.FC = () => {
 
   return (
     <Box maxW="1200px" mx="auto" p={4}>
-      <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={6}>
+      <Text fontSize="2xl" fontWeight="bold" className="blutext" textAlign="center" mb={6}>
         Your Cart
       </Text>
       {cartItems.length === 0 ? (
@@ -51,19 +51,19 @@ export const Cart: React.FC = () => {
               bg="white"
               boxShadow="sm"
             >
-              <Flex align="center" justify="space-between">
+              <Flex align="center" justify="center">
                 <Flex align="center">
                   <Box boxSize="100px">
-                    <img src={item.img || "/default-image.png"} alt={item.title} />
+                    <img src={item.img } alt={item.title} />
                   </Box>
                   <Box ml={4}>
-                    <Text fontSize="xl" fontWeight="bold">
-                      {item.title}
+                    <Text fontSize="xl" fontWeight="semiBold" className="text-center">
+                      &emsp; &emsp; {`${item.title}`} &emsp; &emsp;
                     </Text>
-                    <Text color="gray.600">£{item.price.toFixed(2)}</Text>
+                    <Text color="gray.600" className="text-center"> &emsp; &emsp;£{item.price.toFixed(2)} &emsp; &emsp;</Text>
                   </Box>
                 </Flex>
-                <IconButton
+                &emsp; &emsp;<IconButton
                   icon={<FaTrashAlt />}
                   colorScheme="red"
                   aria-label="Remove item"
