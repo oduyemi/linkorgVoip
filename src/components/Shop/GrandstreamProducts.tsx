@@ -45,7 +45,7 @@ export const GrandstreamProducts: React.FC<GrandstreamProductsProps> = ({ priceR
   const handleAddToCart = (product: Product) => {
       const cartProduct = {
         id: product.id,
-        title: product.title,
+        title: product.webname,
         price: product.price,
         quantity: 1,
       };
@@ -85,7 +85,7 @@ export const GrandstreamProducts: React.FC<GrandstreamProductsProps> = ({ priceR
               }}
             />
             <VStack spacing={2} p={4} align="start">
-              <Text fontSize="lg" fontWeight="bold" className="blutext">{product.title}</Text>
+              <Text fontSize="lg" fontWeight="bold" className="blutext">{product.webname}</Text>
               <Text fontSize="sm" color="gray.500">{product.description}</Text>
               <Flex justify="space-between" w="100%">
                 <Text fontWeight="bold" color="gray.700">&#163;{product.price}</Text>

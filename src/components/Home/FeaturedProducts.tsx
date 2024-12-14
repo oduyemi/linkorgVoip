@@ -11,6 +11,7 @@ interface Product {
   img: string;
   price: number;
   description: string;
+  webname: string;
 }
 
 export const FeaturedProducts: React.FC = () => {
@@ -66,7 +67,7 @@ export const FeaturedProducts: React.FC = () => {
         {products.map((product) => (
           <Box key={product._id} bg="gray.50" p={5} shadow="md" borderWidth="1px" borderRadius="lg">
             <Box position="relative" overflow="hidden">
-              <Image src={product.img} alt={product.title} borderRadius="sm" className="img-responsive" />
+              <Image src={product.img} alt={product.webname} borderRadius="sm" className="img-responsive" />
               <Flex position="relative" top="0.5" left="14">
               <IconButton 
                 aria-label="Add to cart" 
