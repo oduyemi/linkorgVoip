@@ -4,20 +4,13 @@ import {
   Button,
   Flex,
   Grid,
-  IconButton,
   Text,
-  Tooltip,
   useBreakpointValue,
   Image,
   VStack,
   Spinner
   } from "@chakra-ui/react";
-import {
-  FaThLarge,
-  FaBars,
-  FaShoppingCart,
-  FaStar,
-} from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../Cart/CartContext";
 
 export interface Product {
@@ -69,7 +62,7 @@ export const AllProducts: React.FC<AllProductsProps> = ({ priceRange, products }
       price: product.price,
       quantity: 1,
     };
-    // addToCart(cartProduct);
+    addToCart(cartProduct);
   };
 
   if (loading) {

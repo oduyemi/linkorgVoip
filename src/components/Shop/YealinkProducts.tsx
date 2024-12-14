@@ -43,14 +43,14 @@ export const YealinkProducts: React.FC<YealinkProductsProps> = ({ priceRange, pr
   }, [priceRange, products]);
 
   const handleAddToCart = (product: Product) => {
-    const cartProduct = {
-      id: product.id,
-      title: product.title,
-      price: product.price,
-      quantity: 1,
+      const cartProduct = {
+        id: product.id,
+        title: product.title,
+        price: product.price,
+        quantity: 1,
+      };
+      addToCart(cartProduct);
     };
-    // addToCart(cartProduct);
-  };
 
   if (loading) {
     return (

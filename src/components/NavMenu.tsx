@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { UserContext } from "../usercontext";
+import { useCart } from "./Cart/CartContext";
 import {
   Box,
   Flex,
@@ -15,7 +16,11 @@ import { FaUserCircle, FaBars, FaAngleDown, FaHeart, FaShoppingCart } from 'reac
 
 export const NavMenu: React.FC = () => {
   const { user } = useContext(UserContext);
+  const { cartCount } = useCart();
   const { isOpen, onToggle } = useDisclosure();
+
+  // Determine cart color based on item count
+  const cartColor = cartCount > 0 ? '#e65d0f' : 'white';
 
   return (
     <Box className="container-fluid blu mb-30">
@@ -91,14 +96,23 @@ export const NavMenu: React.FC = () => {
               </Flex>
               <HStack spacing={4} className="navbar-nav ml-auto py-0 d-none d-lg-block">
                 <Flex justifyContent="space-between">
-                <Link className="btn px-0" href="/wishlist">
-                  <FaHeart className="text-white" />
-                  <span className="badge text-white border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
-                </Link>
-                <Link className="btn px-0 ml-3" href="/cart">
-                  <FaShoppingCart className="text-white" />
-                  <span className="badge text-white border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
-                </Link>
+                  <Link className="btn px-0" href="/wishlist">
+                    <FaHeart className="text-white" />
+                    <span className="badge text-white border border-secondary rounded-circle" style={{ paddingBottom: '2px' }}>0</span>
+                  </Link>
+                  <Link className="btn px-0 ml-3" href="/cart">
+                    <FaShoppingCart style={{ color: cartColor }} />
+                    <span
+                      className="badge border border-secondary rounded-circle"
+                      style={{
+                        paddingBottom: '2px',
+                        color: cartColor,
+                        borderColor: cartColor,
+                      }}
+                    >
+                      {cartCount}
+                    </span>
+                  </Link>
                   {user ? (
                     <HStack spacing={3} align="center">
                       <Text className="d-inline">Hi {user && user.firstName}</Text>
