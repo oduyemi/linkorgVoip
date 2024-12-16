@@ -14,7 +14,7 @@ export const Payment: React.FC = () => {
   const [errorMessage, setErrorMessage] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
-  const [price, setPrice] = useState<number>(0); // State to hold the price
+  const [price, setPrice] = useState<number>(0); 
   const navigate = useNavigate();
   const toast = useToast();
   const stripe = useStripe();
@@ -31,16 +31,15 @@ export const Payment: React.FC = () => {
     const storedCartItems = localStorage.getItem('cartItems');
     if (storedCartItems) {
       const cartItems = JSON.parse(storedCartItems);
-      // Assuming the cartItems array contains objects with a 'price' property
       const totalPrice = cartItems.reduce((total: number, item: any) => total + item.price, 0);
-      setPrice(totalPrice); // Set total price from cart items
+      setPrice(totalPrice); 
     }
   }, [navigate]);
 
   useEffect(() => {
     if (userInfo) {
       axios.post("https://linkorg-voip.vercel.app/api/v1/payment/stripe-payments", {
-        amount: price * 100, // Price is in cents
+        amount: price * 100, // Price in cents
         email: userInfo.email, 
       })
       .then(response => {
@@ -137,7 +136,7 @@ export const Payment: React.FC = () => {
         body: JSON.stringify({
           currency: 'GBP',
           email: userInfo.email, 
-          amount: price * 100, // Price is in cents
+          amount: price * 100, // Price in cents
           paymentMethodType: "card"
         }),
       });
@@ -182,22 +181,20 @@ export const Payment: React.FC = () => {
 
   return (
     <Box maxW="600px" mx="auto" p={4}>
-      <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={6}>
+      <Text fontSize="3xl" fontWeight="bold" className="blutext" textAlign="center" mb={6}>
         Payment Page
       </Text>
       {paymentStatus && <Text color="green.500">{paymentStatus}</Text>}
       {errorMessage && <Text color="red.500">{errorMessage}</Text>}
       {successMessage && <Text color="green.500">{successMessage}</Text>}
-  
-      {/* Ensure clientSecret is passed to Elements */}
-      {clientSecret && (
+        {clientSecret && (
         <Elements stripe={stripePromise} options={{ clientSecret }}>
           <form onSubmit={handleSubmit} className='px-4'>
             <div className='mb-3'>
-              <label htmlFor="email-input">Email</label>
+              <label htmlFor="email-input"><b>Email</b></label>
               <div>
                 <input 
-                  value={userInfo.email} 
+                  value={userInfo.email}
                   type="email" 
                   id="email-input" 
                   placeholder='johndoe@gmail.com' 
@@ -205,9 +202,8 @@ export const Payment: React.FC = () => {
                 />
               </div>
             </div>
-            {/* Display price from localStorage */}
             <div className="mb-3">
-              <label htmlFor="price">Price</label>
+              <label htmlFor="price"><b>Price</b></label>
               <input 
                 value={`£${price.toFixed(2)}`} 
                 type="text" 
@@ -228,7 +224,6 @@ export const Payment: React.FC = () => {
                 Complete Payment
               </Button>
             </Box>
-            {/* Show error message to your customers */}
             {errorMessage && <div>{errorMessage}</div>}
           </form>
         </Elements>
