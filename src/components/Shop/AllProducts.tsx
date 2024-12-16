@@ -100,7 +100,7 @@ export const AllProducts: React.FC<AllProductsProps> = ({ priceRange, products }
             productId: product._id,
             quantity: 1,
           },
-          { headers: { Authorization: `Bearer ${user.token}` } } // Ensure `user.token` is valid
+          { headers: { Authorization: `Bearer ${user.token}` } }
         );
   
         if (response.status === 200) {

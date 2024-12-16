@@ -253,118 +253,155 @@ useEffect(() => {
 
   return (
     <VStack spacing={8} p={8} align="stretch" bg="gray.50" borderRadius="md">
-      <Text fontSize="3xl" fontWeight="bold" textAlign="center" color="#010156" mb={6}>
-        Welcome to Your Dashboard
+  <Text fontSize="3xl" fontWeight="bold" textAlign="center" color="#010156" mb={6}>
+    Welcome to Your Dashboard
+  </Text>
+
+  {/* Product Suggestions */}
+  <Box>
+    <Text fontSize="lg" fontWeight="semibold" color="#010156" mb={4}>
+      Product Suggestions
+    </Text>
+    {loading ? (
+      <Spinner size="lg" color="teal.500" />
+    ) : (
+      <Slider {...sliderSettings}>
+        {productSuggestions.map((item) => (
+          <Box
+            key={item._id}
+            borderWidth={1}
+            borderRadius="lg"
+            p={4}
+            bg="white"
+            boxShadow="lg"
+            textAlign="center"
+            _hover={{
+              boxShadow: '2xl',
+              transform: 'scale(1.05)',
+              transition: 'all 0.3s ease',
+            }}
+          >
+            <Image
+              src={`${item.img}`}
+              alt={item.title}
+              height="200px"
+              borderRadius="md"
+              objectFit="cover"
+              mx="auto"
+            />
+            <Heading mt={4} fontSize="lg" fontWeight="semibold" className="blutext">
+              {item.title}
+            </Heading>
+            <Text fontSize="sm" color="gray.700" mt={2}>
+              £{item.price.toFixed(2)}
+            </Text>
+            <Button
+              mt={4}
+              colorScheme="teal"
+              size="sm"
+              onClick={() => handleAddToCart(item)}
+              _hover={{ bg: 'teal.600' }}
+            >
+              Add to Cart
+            </Button>
+          </Box>
+        ))}
+      </Slider>
+    )}
+  </Box>
+
+  {/* Purchased Items */}
+  <Box bg="gray.100" p={6} borderRadius="lg" boxShadow="md">
+    <Text fontSize="lg" fontWeight="semibold" color="#010156" mb={4}>
+      Purchased Items
+    </Text>
+    {purchasedItems.length > 0 ? (
+      <SimpleGrid columns={gridColumns} spacing={6}>
+        {purchasedItems.map((item) => (
+          <Box
+            key={item._id}
+            borderWidth={1}
+            borderRadius="lg"
+            p={4}
+            bg="white"
+            boxShadow="lg"
+            _hover={{ boxShadow: '2xl' }}
+          >
+            <Image
+              src={item.img}
+              alt={item.title}
+              height="150px"
+              borderRadius="md"
+              objectFit="cover"
+              mb={4}
+            />
+            <Text fontSize="md" fontWeight="medium" color="gray.800">
+              {item.title}
+            </Text>
+            <Text fontSize="sm" color="gray.600">
+              £{item.price.toFixed(2)}
+            </Text>
+          </Box>
+        ))}
+      </SimpleGrid>
+    ) : (
+      <Text fontSize="md" color="gray.500" textAlign="center">
+        You have no purchased items yet.
       </Text>
+    )}
+  </Box>
 
-      {/* Product Suggestions */}
-      <Box>
-        <Text fontSize="lg" fontWeight="semibold" color="#010156" mb={4}>
-          Product Suggestions
-        </Text>
-        {loading ? (
-          <Spinner size="lg" color="teal.500" />
-        ) : (
-          <Slider {...sliderSettings}>
-            {productSuggestions.map((item) => (
-              <div key={item._id}>
-                <Box
-                  borderWidth={1}
-                  borderRadius="lg"
-                  p={4}
-                  bg="white"
-                  boxShadow="md"
-                  textAlign="center"
-                  _hover={{
-                    boxShadow: 'xl',
-                    transform: 'scale(1.05)',
-                    transition: 'all 0.3s ease',
-                  }}
-                  transition="all 0.3s ease-in-out"
-                >
-                  <Image
-                    src={`${item.img}`}
-                    alt={item.title}
-                    height="200px"
-                    borderRadius="md"
-                    className="mx-auto"
-                  />
-                  <Heading mt={4} fontSize="md" fontWeight="medium" className="blutext">
-                    {`${item.webName}`}
-                  </Heading>
-                  <Text fontSize="sm" color="gray.700">
-                    £{item.price}
-                  </Text>
-                  <Button
-                    mt={4}
-                    colorScheme="orange"
-                    size="sm"
-                    onClick={() => handleAddToCart(item)} 
-                    _hover={{ bg: '#010156' }}
-                  >
-                    Add to Cart
-                  </Button>
-                </Box>
-              </div>
-            ))}
-          </Slider>
-        )}
-      </Box>
-
-      {/* Purchased Items */}
-      <Box>
-        <Text fontSize="lg" fontWeight="semibold" color="#010156" mb={4}>
-          Purchased Items
-        </Text>
-        {purchasedItems.length > 0 ? (
-          <SimpleGrid columns={gridColumns} spacing={6} mt={4}>
-            {purchasedItems.map((item) => (
-              <Box key={item._id} borderWidth={1} p={4} bg="white" boxShadow="md">
-                <Image src={item.img} alt={item.title} />
-                <Text>{item.title}</Text>
-                <Text>{item.price}</Text>
-              </Box>
-            ))}
-          </SimpleGrid>
-        ) : (
-          <Text fontSize="md" color="gray.500" textAlign="center" mt={4}>
-            You have no purchased items yet.
-          </Text>
-        )}
-      </Box>
-
-      {/* Wishlist */}
-      <Box>
-        <Text fontSize="lg" fontWeight="semibold" color="#010156" mb={4}>
-          Wishlist
-        </Text>
-        {loadingWishlist ? (
-          <Spinner size="lg" color="teal.500" />
-        ) : wishlistItems.length > 0 ? (
-          <SimpleGrid columns={gridColumns} spacing={6} mt={4}>
-            {wishlistItems.map((item) => (
-              <Box key={item._id} borderWidth={1} p={4} bg="white" boxShadow="md">
-                <Image src={`https://linkorg-voip.vercel.app/${item.img}`} alt={item.title} />
-                <Text>{item.title}</Text>
-                <Text>{item.price}</Text>
-                <Button
-                  mt={2}
-                  colorScheme="red"
-                  size="sm"
-                  onClick={() => handleRemoveFromWishlist(item._id)}
-                >
-                  Remove
-                </Button>
-              </Box>
-            ))}
-          </SimpleGrid>
-        ) : (
-          <Text fontSize="md" color="gray.500" textAlign="center" mt={4}>
-            Your wishlist is empty.
-          </Text>
-        )}
-      </Box>
-    </VStack>
+  {/* Wishlist */}
+  <Box bg="gray.100" p={6} borderRadius="lg" boxShadow="md">
+    <Text fontSize="lg" fontWeight="semibold" color="#010156" mb={4}>
+      Wishlist
+    </Text>
+    {loadingWishlist ? (
+      <Spinner size="lg" color="teal.500" />
+    ) : wishlistItems.length > 0 ? (
+      <SimpleGrid columns={gridColumns} spacing={6}>
+        {wishlistItems.map((item) => (
+          <Box
+            key={item._id}
+            borderWidth={1}
+            borderRadius="lg"
+            p={4}
+            bg="white"
+            boxShadow="lg"
+            _hover={{ boxShadow: '2xl' }}
+          >
+            <Image
+              src={`${item.img}`}
+              alt={item.title}
+              height="150px"
+              borderRadius="md"
+              objectFit="cover"
+              mb={4}
+            />
+            <Text fontSize="md" fontWeight="medium" color="gray.800">
+              {item.title}
+            </Text>
+            <Text fontSize="sm" color="gray.600">
+              £{item.price.toFixed(2)}
+            </Text>
+            <Button
+              mt={2}
+              colorScheme="red"
+              size="sm"
+              onClick={() => handleRemoveFromWishlist(item._id)}
+            >
+              Remove
+            </Button>
+          </Box>
+        ))}
+      </SimpleGrid>
+    ) : (
+      <Text fontSize="md" color="gray.500" textAlign="center">
+        Your wishlist is empty.
+      </Text>
+    )}
+  </Box>
+</VStack>
   );
 };
 

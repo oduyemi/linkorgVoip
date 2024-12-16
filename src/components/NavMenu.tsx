@@ -93,6 +93,7 @@ export const NavMenu: React.FC = () => {
               <Flex justifyContent="space-between" className="navbar-nav mr-auto py-0">
                 <Link href="/shop" className="nav-item nav-link">Shop</Link>
                 <Link href="/packages" className="nav-item nav-link">Packages</Link>
+                <Link href="/dashboard" className="nav-item nav-link">Dashboard</Link>
               </Flex>
               <HStack spacing={4} className="navbar-nav ml-auto py-0 d-none d-lg-block">
                 <Flex justifyContent="space-between">
