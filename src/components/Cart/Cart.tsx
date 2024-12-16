@@ -2,10 +2,12 @@ import React from "react";
 import { Button, useToast, Box, Text, Flex, Stack, IconButton, Link, Heading } from "@chakra-ui/react";
 import { FaTrashAlt } from "react-icons/fa";
 import { useCart, CartItem } from "./CartContext";
+import { useNavigate } from "react-router-dom";
 
 export const Cart: React.FC = () => {
   const { cartItems, removeFromCart, addToCart } = useCart();
   const toast = useToast();
+  const navigate = useNavigate();
 
   const handleIncreaseQuantity = (id: string) => {
     addToCart({ id, title: "", img: "", price: 0, quantity: 1 });
@@ -60,46 +62,33 @@ export const Cart: React.FC = () => {
                     <Text fontSize="xl" fontWeight="semiBold" className="text-center">
                       &emsp; &emsp; {`${item.title}`} &emsp; &emsp;
                     </Text>
-                    <Text color="gray.600" className="text-center"> &emsp; &emsp;£{item.price.toFixed(2)} &emsp; &emsp;</Text>
+                    <Text color="gray.600" className="text-center"> &emsp; &emsp;£{item.price.toFixed(2)} </Text>
+                    <Flex>
+                      <IconButton
+                        icon={<FaTrashAlt />}
+                        aria-label="remove from cart"
+                        onClick={() => handleRemoveItem(item.id)}
+                      />
+                    </Flex>
                   </Box>
                 </Flex>
-                &emsp; &emsp;<IconButton
-                  icon={<FaTrashAlt />}
-                  colorScheme="red"
-                  aria-label="Remove item"
-                  onClick={() => handleRemoveItem(item.id)}
-                />
-              </Flex>
-              <Flex mt={4} align="center" justify="space-between">
-                <Button size="sm" onClick={() => handleDecreaseQuantity(item.id)}>
-                  -
-                </Button>
-                <Text>{item.quantity}</Text>
-                <Button size="sm" onClick={() => handleIncreaseQuantity(item.id)}>
-                  +
-                </Button>
               </Flex>
             </Box>
           ))}
+          <Flex justify="flex-end" mt={6}>
+            <Button
+              colorScheme="orange"
+              size="lg"
+              onClick={() => {
+                localStorage.setItem("cartItems", JSON.stringify(cartItems));
+                navigate("/payment");
+              }}
+            >
+              Checkout
+            </Button>
+          </Flex>
         </Stack>
       )}
-      <Box mt={6} bg="gray.50" p={4} borderRadius="md">
-        <Flex justify="space-between">
-          <Text fontSize="xl" fontWeight="bold">
-            Total: £{calculateTotal().toFixed(2)}
-          </Text>
-          <Button
-            colorScheme="orange"
-            size="lg"
-            onClick={() => {
-              localStorage.setItem("cartItems", JSON.stringify(cartItems));
-              window.location.href = `https://buy.stripe.com/5kA7umaTj0r08TK289`;
-            }}
-          >
-            Checkout
-          </Button>
-        </Flex>
-      </Box>
     </Box>
   );
 };

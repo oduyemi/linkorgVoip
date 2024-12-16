@@ -1,15 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
-import { Elements } from '@stripe/react-stripe-js';
+import { Elements, PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import { useNavigate } from 'react-router-dom';
-import { Button, Box, Text, Link } from '@chakra-ui/react';
+import { Button, Box, Text, useToast } from '@chakra-ui/react';
+import axios from 'axios';
 
 const stripePromise = loadStripe("pk_live_51QIQGdP8MdHf1E0aoaEz6vArMtkofrdwKbpF66LedwC7g1JW7M8q0awmMGEAluKp3mr7IBWYnMyuvKHSRJGW2P3000tJSAaUYj");
 
 export const Payment: React.FC = () => {
+  const [clientSecret, setClientSecret] = useState<string | null>(null);
   const [paymentStatus, setPaymentStatus] = useState<string>(''); 
   const [userInfo, setUserInfo] = useState<any>(null); 
+  const [errorMessage, setErrorMessage] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [price, setPrice] = useState<number>(0); // State to hold the price
   const navigate = useNavigate();
+  const toast = useToast();
+  const stripe = useStripe();
+  const elements = useElements();
 
   useEffect(() => {
     const storedUserInfo = localStorage.getItem('userInfo');
@@ -18,25 +27,39 @@ export const Payment: React.FC = () => {
     } else {
       navigate('/checkout');
     }
+
+    const storedCartItems = localStorage.getItem('cartItems');
+    if (storedCartItems) {
+      const cartItems = JSON.parse(storedCartItems);
+      // Assuming the cartItems array contains objects with a 'price' property
+      const totalPrice = cartItems.reduce((total: number, item: any) => total + item.price, 0);
+      setPrice(totalPrice); // Set total price from cart items
+    }
   }, [navigate]);
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(window.location.search);
-    const paymentStatus = queryParams.get("payment_status");
-    if (paymentStatus === "success") {
-      handlePaymentSuccess();
-    }
-  }, []);
-  
-
-  const handlePaymentSuccess = () => {
-    // After successful payment, generate and send the XML document
     if (userInfo) {
-      const xml = generateXML(userInfo);
-      sendOrderToVendor(xml);
-      setPaymentStatus('Payment Successful');
+      axios.post("https://linkorg-voip.vercel.app/api/v1/payment/stripe-payments", {
+        amount: price * 100, // Price is in cents
+        email: userInfo.email, 
+      })
+      .then(response => {
+        const { clientSecret } = response.data;
+        if (clientSecret) {
+          setClientSecret(clientSecret);
+        } else {
+          console.error('No clientSecret returned:', response.data);
+        }
+      })
+      .catch(error => {
+        console.error('Error creating payment intent:', error);
+      });
     }
-  };
+  }, [userInfo, price]);
+
+  if (!clientSecret) {
+    return <div>Loading...</div>;
+  }
 
   const generateXML = (userInfo: any) => {
     return `
@@ -83,19 +106,133 @@ export const Payment: React.FC = () => {
     }
   };
 
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!userInfo || !userInfo.name || !userInfo.companyName || !userInfo.address || !userInfo.postcode || !userInfo.phone || !userInfo.email || !userInfo.country) {
+      toast({
+        title: 'Missing Information',
+        description: 'Please fill in all required fields.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+      return;
+    }
+
+    setLoading(true);
+
+    if (!stripe || !elements) {
+      setErrorMessage('Stripe or Elements not loaded yet.');
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch('https://linkorg-voip.vercel.app/api/v1/payment/stripe-payments', { 
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          currency: 'GBP',
+          email: userInfo.email, 
+          amount: price * 100, // Price is in cents
+          paymentMethodType: "card"
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error('Failed to create payment intent.');
+      }
+
+      const { client_secret: clientSecret } = await res.json();
+
+      const { error } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: `${window.location.origin}/success`,
+        },
+      });
+
+      if (error) {
+        setErrorMessage(error.message || 'An unknown error occurred');
+        return;
+      }
+
+      const xml = generateXML(userInfo);
+      await sendOrderToVendor(xml);
+
+      setSuccessMessage('Payment successful!');
+      navigate('/success'); 
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      toast({
+        title: 'Payment Failed',
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Box maxW="600px" mx="auto" p={4}>
       <Text fontSize="2xl" fontWeight="bold" textAlign="center" mb={6}>
         Payment Page
       </Text>
       {paymentStatus && <Text color="green.500">{paymentStatus}</Text>}
-      <Elements stripe={stripePromise}>
-        {/* Include Stripe Payment Form Component */}
-        {/* After payment success, call handlePaymentSuccess */}
-      </Elements>
-        <Button onClick={handlePaymentSuccess} colorScheme="green">
-          Complete Payment
-        </Button>
+      {errorMessage && <Text color="red.500">{errorMessage}</Text>}
+      {successMessage && <Text color="green.500">{successMessage}</Text>}
+  
+      {/* Ensure clientSecret is passed to Elements */}
+      {clientSecret && (
+        <Elements stripe={stripePromise} options={{ clientSecret }}>
+          <form onSubmit={handleSubmit} className='px-4'>
+            <div className='mb-3'>
+              <label htmlFor="email-input">Email</label>
+              <div>
+                <input 
+                  value={userInfo.email} 
+                  type="email" 
+                  id="email-input" 
+                  placeholder='johndoe@gmail.com' 
+                  disabled 
+                />
+              </div>
+            </div>
+            {/* Display price from localStorage */}
+            <div className="mb-3">
+              <label htmlFor="price">Price</label>
+              <input 
+                value={`£${price.toFixed(2)}`} 
+                type="text" 
+                id="price" 
+                disabled 
+                style={{ width: '100%', padding: '10px', backgroundColor: '#f4f4f4' }}
+              />
+            </div>
+            <PaymentElement />
+            <Box className="text-center">
+              <Button 
+                type="submit" 
+                isLoading={loading} 
+                isDisabled={!stripe || !elements || !userInfo.email}
+                colorScheme="orange"
+                className="mt-3"
+              >
+                Complete Payment
+              </Button>
+            </Box>
+            {/* Show error message to your customers */}
+            {errorMessage && <div>{errorMessage}</div>}
+          </form>
+        </Elements>
+      )}
     </Box>
   );
 };

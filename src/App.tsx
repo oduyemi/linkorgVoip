@@ -18,19 +18,21 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import CartPage from "./pages/CartPage";
 import WishList from "./pages/Wishlist";
-import PayOptions from "./pages/PayOptions";
-import PaystackPage from "./pages/Paystack";
+import { Elements } from '@stripe/react-stripe-js';
+import { loadStripe } from '@stripe/stripe-js';
 import UserDashboard from "./pages/Dashboard";
 import { CartProvider } from "./components/Cart/CartContext";
 import { LogOut } from "./components/Logout";
 import Checkout from "./pages/Checkout";
 import Pay from "./pages/Pay";
 
+const stripePromise = loadStripe("pk_live_51QIQGdP8MdHf1E0aoaEz6vArMtkofrdwKbpF66LedwC7g1JW7M8q0awmMGEAluKp3mr7IBWYnMyuvKHSRJGW2P3000tJSAaUYj");
+
 const App: React.FC = () => {
     return (
         <ChakraProvider>
             <UserProvider>
-                <CartProvider> 
+                <CartProvider>
                     <BrowserRouter>
                         <Navbar />
                         <Routes>
@@ -42,18 +44,20 @@ const App: React.FC = () => {
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<UserDashboard />} />
-                            <Route path="/logout" element={<LogOut/>} />
+                            <Route path="/logout" element={<LogOut />} />
                             <Route path="/shop" element={<GeneralShop />} />
                             <Route path="/yealink" element={<YealinkStore />} />
                             <Route path="/grandstream" element={<GrandstreamStore />} />
                             <Route path="/fanvil" element={<FanvilStore />} />
                             <Route path="/cisco" element={<CiscoStore />} />
-                            {/* <Route path="/add-to-cart" element={<ToCart />} /> */}
                             <Route path="/cart" element={<CartPage />} />
                             <Route path="/checkout" element={<Checkout />} />
                             <Route path="/wishlist" element={<WishList />} />
-                            <Route path="/payment-option" element={<PayOptions />} />
-                            <Route path="/payment" element={<Pay />} />
+                            <Route path="/payment" element={
+                                <Elements stripe={stripePromise}>
+                                    <Pay />
+                                </Elements>
+                            } />
                             <Route path="*" element={<Error404 />} />
                         </Routes>
                     </BrowserRouter>
