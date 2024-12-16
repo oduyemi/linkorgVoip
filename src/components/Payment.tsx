@@ -20,6 +20,15 @@ export const Payment: React.FC = () => {
     }
   }, [navigate]);
 
+  useEffect(() => {
+    const queryParams = new URLSearchParams(window.location.search);
+    const paymentStatus = queryParams.get("payment_status");
+    if (paymentStatus === "success") {
+      handlePaymentSuccess();
+    }
+  }, []);
+  
+
   const handlePaymentSuccess = () => {
     // After successful payment, generate and send the XML document
     if (userInfo) {
@@ -84,11 +93,9 @@ export const Payment: React.FC = () => {
         {/* Include Stripe Payment Form Component */}
         {/* After payment success, call handlePaymentSuccess */}
       </Elements>
-      <Link href="https://buy.stripe.com/3cs3e63qRa1A0ne144">
         <Button onClick={handlePaymentSuccess} colorScheme="green">
           Complete Payment
         </Button>
-      </Link>
     </Box>
   );
 };

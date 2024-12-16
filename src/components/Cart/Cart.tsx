@@ -88,11 +88,16 @@ export const Cart: React.FC = () => {
           <Text fontSize="xl" fontWeight="bold">
             Total: £{calculateTotal().toFixed(2)}
           </Text>
-          <Link href="/checkout">
-            <Button colorScheme="orange" size="lg">
-              Checkout
-            </Button>
-          </Link>
+          <Button
+            colorScheme="orange"
+            size="lg"
+            onClick={() => {
+              localStorage.setItem("cartItems", JSON.stringify(cartItems));
+              window.location.href = `https://buy.stripe.com/5kA7umaTj0r08TK289`;
+            }}
+          >
+            Checkout
+          </Button>
         </Flex>
       </Box>
     </Box>

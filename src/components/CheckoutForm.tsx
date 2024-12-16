@@ -44,12 +44,9 @@ export const CheckoutForm: React.FC = () => {
     }
 
     setLoading(true);
-
-    // Store user details in localStorage
     localStorage.setItem('userInfo', JSON.stringify(userInfo));
 
-    // Redirect to the payment page
-    navigate('/payment'); // Assuming your payment page is located at /payment
+    navigate('/payment');
   };
 
   return (
