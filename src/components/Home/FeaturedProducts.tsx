@@ -96,7 +96,7 @@ export const FeaturedProducts: React.FC = () => {
     };
   
     try {
-      if (user) {
+      if (user?.token) {
         // User is logged in
         const response = await axios.post(
           "https://linkorg-voip.vercel.app/api/v1/cart/add",
@@ -105,13 +105,13 @@ export const FeaturedProducts: React.FC = () => {
             productId: product._id,
             quantity: 1,
           },
-          { headers: { Authorization: `Bearer ${user.token}` } } 
+          { headers: { Authorization: `Bearer ${user.token}` } }
         );
   
         if (response.status === 200) {
           toast({
             title: "Success!",
-            description: response.data.message || "Product added to cart.",
+            description: response.data.message || "Product added to cart successfully.",
             status: "success",
             duration: 3000,
             isClosable: true,
@@ -120,7 +120,7 @@ export const FeaturedProducts: React.FC = () => {
           throw new Error("Unexpected API response");
         }
       } else {
-        // User is not logged in, fallback to local storage
+        // User not logged in, use local storage
         const currentCart = JSON.parse(localStorage.getItem(cartKey) || "[]");
         const existingIndex = currentCart.findIndex(
           (item: Product) => item._id === product._id
@@ -135,23 +135,24 @@ export const FeaturedProducts: React.FC = () => {
         localStorage.setItem(cartKey, JSON.stringify(currentCart));
         toast({
           title: "Added to Cart",
-          description: "Log in to sync with your account.",
+          description: "Log in to sync your cart with your account.",
           status: "info",
           duration: 3000,
           isClosable: true,
         });
       }
-    } catch (error) {
-      console.error("Error adding to cart:", error); // Log the error
+    } catch (error:any) {
+      console.error("Error adding to cart:", error);
       toast({
         title: "Error",
-        description: "Could not add product to cart. Please try again.",
+        description: error.response?.data?.message || "Could not add product to cart. Please try again.",
         status: "error",
         duration: 3000,
         isClosable: true,
       });
     }
-  }
+  };
+  
   if (loading) {
     return (
       <Container maxW="container.xl" py={10}>

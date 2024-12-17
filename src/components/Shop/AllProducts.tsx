@@ -91,8 +91,8 @@ export const AllProducts: React.FC<AllProductsProps> = ({ priceRange, products }
     };
   
     try {
-      if (user) {
-        // User is logged in, sync with API
+      if (user?.token) {
+        // User is logged in
         const response = await axios.post(
           "https://linkorg-voip.vercel.app/api/v1/cart/add",
           {
@@ -115,7 +115,7 @@ export const AllProducts: React.FC<AllProductsProps> = ({ priceRange, products }
           throw new Error("Unexpected API response");
         }
       } else {
-        // User is not logged in, handle with local storage
+        // User not logged in, use local storage
         const currentCart = JSON.parse(localStorage.getItem(cartKey) || "[]");
         const existingIndex = currentCart.findIndex(
           (item: Product) => item._id === product._id
@@ -136,17 +136,64 @@ export const AllProducts: React.FC<AllProductsProps> = ({ priceRange, products }
           isClosable: true,
         });
       }
-    } catch (error) {
-      console.error("Error adding to cart:", error); 
+    } catch (error:any) {
+      console.error("Error adding to cart:", error);
       toast({
         title: "Error",
-        description: "Could not add product to cart. Please try again.",
+        description: error.response?.data?.message || "Could not add product to cart. Please try again.",
         status: "error",
         duration: 3000,
         isClosable: true,
       });
     }
   };
+
+  const handleClearCart = async () => {
+    const cartKey = user ? `cart-${user._id}` : `cart-${userIP || "guest"}`;
+  
+    try {
+      if (user) {
+        // Clear cart via API
+        const response = await axios.post(
+          "https://linkorg-voip.vercel.app/api/v1/cart/clear",
+          { userId: user._id },
+          { headers: { Authorization: `Bearer ${user.token}` } }
+        );
+  
+        if (response.status === 200) {
+          toast({
+            title: "Cart Cleared",
+            description: response.data.message || "Your cart has been cleared successfully.",
+            status: "success",
+            duration: 3000,
+            isClosable: true,
+          });
+        } else {
+          throw new Error("Unexpected API response");
+        }
+      } else {
+        // Clear cart in local storage
+        localStorage.removeItem(cartKey);
+        toast({
+          title: "Cart Cleared",
+          description: "Log in to sync your cart with your account.",
+          status: "info",
+          duration: 3000,
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      console.error("Error clearing cart:", error);
+      toast({
+        title: "Error",
+        description: "Could not clear cart. Please try again.",
+        status: "error",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+  };
+  
   
   if (loading) {
     return (
