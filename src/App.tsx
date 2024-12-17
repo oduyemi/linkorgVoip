@@ -25,6 +25,7 @@ import { CartProvider } from "./components/Cart/CartContext";
 import { LogOut } from "./components/Logout";
 import Checkout from "./pages/Checkout";
 import Pay from "./pages/Pay";
+import { MyCart } from "./pages/MyCart";
 
 const stripePromise = loadStripe("pk_live_51QIQGdP8MdHf1E0aoaEz6vArMtkofrdwKbpF66LedwC7g1JW7M8q0awmMGEAluKp3mr7IBWYnMyuvKHSRJGW2P3000tJSAaUYj");
 
@@ -44,6 +45,7 @@ const App: React.FC = () => {
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                             <Route path="/dashboard" element={<UserDashboard />} />
+                            <Route path="/dashboard/my-cart" element={<MyCart />} />
                             <Route path="/logout" element={<LogOut />} />
                             <Route path="/shop" element={<GeneralShop />} />
                             <Route path="/yealink" element={<YealinkStore />} />
