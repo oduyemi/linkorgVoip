@@ -1,5 +1,20 @@
 import React from "react";
-import { Button, useToast, Box, Text, Flex, Stack, IconButton, Heading, HStack, NumberInput, NumberInputField, NumberInputStepper, NumberIncrementStepper, NumberDecrementStepper } from "@chakra-ui/react";
+import { 
+  Button, 
+  useToast, 
+  Box, 
+  Text, 
+  Flex, 
+  Stack, 
+  IconButton, 
+  Heading, 
+  HStack, 
+  NumberInput, 
+  NumberInputField, 
+  NumberInputStepper, 
+  NumberIncrementStepper, 
+  NumberDecrementStepper 
+} from "@chakra-ui/react";
 import { FaTrashAlt } from "react-icons/fa";
 import { useCart, CartItem } from "./CartContext";
 import { useNavigate } from "react-router-dom";
