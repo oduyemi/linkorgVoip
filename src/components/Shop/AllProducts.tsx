@@ -221,7 +221,8 @@ export const AllProducts: React.FC<AllProductsProps> = ({ priceRange, products }
               src={product.img}
               alt={product.title}
               width="100%"
-              height="auto"
+              height="34%"
+              className="img-responsive"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = "https://via.placeholder.com/300";
