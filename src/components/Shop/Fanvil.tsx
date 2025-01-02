@@ -7,12 +7,16 @@ import {
   Badge,
   Stack,
   Flex,
+  Spinner,
+  useColorMode,
+  useColorModeValue,
+  Button,
+  Icon,
 } from "@chakra-ui/react";
+import { CheckCircleIcon } from "@chakra-ui/icons";
 import { brandUrls, Product } from "./AllProducts";
 import axios from "axios";
-import { CiscoProducts } from "./CiscoProducts";
 import { FanvilProducts } from "./FanvilProducts";
-
 
 export const Fanvil: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -20,6 +24,7 @@ export const Fanvil: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [selectedBrands, setSelectedBrands] = useState<string[]>(["fanvil"]);
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const { colorMode, toggleColorMode } = useColorMode();
 
   const priceRanges: { label: string; range: [number, number] }[] = [
     { label: "£0 - £100", range: [0, 100] },
@@ -42,7 +47,9 @@ export const Fanvil: React.FC = () => {
         const response = await axios.get(brandUrls["fanvil"]);
         setProducts(response.data.data);
       } else {
-        const brandRequests = selectedBrands.map((brand) => axios.get(brandUrls[brand]));
+        const brandRequests = selectedBrands.map((brand) =>
+          axios.get(brandUrls[brand])
+        );
         const responses = await Promise.all(brandRequests);
         const fetchedProducts = responses.flatMap((res) => res.data.data);
         setProducts(fetchedProducts);
@@ -79,80 +86,89 @@ export const Fanvil: React.FC = () => {
     }
   };
 
+  const sidebarBg = useColorModeValue("gray.50", "gray.700");
+  const headingColor = useColorModeValue("blue.600", "blue.300");
+
   return (
     <Box p={5}>
+      <Flex justifyContent="space-between" mb={4}>
+        <Heading>Shop</Heading>
+        <Button onClick={toggleColorMode}>
+          Toggle {colorMode === "light" ? "Dark" : "Light"} Mode
+        </Button>
+      </Flex>
       <Flex flexWrap="wrap" gap={5}>
         {/* Shop Sidebar Start */}
-        <Box w={{ base: "100%", md: "30%", lg: "25%" }}>
+        <Box w={{ base: "100%", md: "30%", lg: "25%" }} boxShadow="md" bg={sidebarBg} borderRadius="md" p={5}>
           {/* Price Filter */}
-          <Heading as="h6" fontSize="lg" mb={3} textTransform="uppercase">
-            <Box as="span" color="blue.600">
-              Filter by price
-            </Box>
+          <Heading as="h6" fontSize="lg" mb={3} textTransform="uppercase" color={headingColor}>
+            Filter by price
           </Heading>
-          <Box bg="gray.50" p={4} borderRadius="md" mb={6}>
-            <FormControl as="form">
-              <Checkbox
-                isChecked={priceRange[0] === 0 && priceRange[1] === 1000}
-                onChange={() => setPriceRange([0, 1000])}
-              >
-                All Prices
-                <Badge ml={2} fontWeight="normal" border="1px" borderColor="gray.300">
-                  {filteredProducts.length}
-                </Badge>
-              </Checkbox>
-              <Stack spacing={3} mt={3}>
-                {priceRanges.map((range, index) => {
-                  const count = products.filter(
-                    (product) => product.price >= range.range[0] && product.price <= range.range[1]
-                  ).length;
-                  return (
-                    <Checkbox
-                      key={index}
-                      isChecked={priceRange[0] === range.range[0] && priceRange[1] === range.range[1]}
-                      onChange={() => handleCheckboxChange(range.range)}
-                    >
-                      {range.label}
-                      <Badge>{count}</Badge>
-                    </Checkbox>
-                  );
-                })}
-              </Stack>
-            </FormControl>
-          </Box>
+          <FormControl as="form">
+            <Checkbox
+              isChecked={priceRange[0] === 0 && priceRange[1] === 1000}
+              onChange={() => setPriceRange([0, 1000])}
+            >
+              All Price
+              <Badge ml={2} colorScheme="blue">
+                {filteredProducts.length}
+              </Badge>
+            </Checkbox>
+            <Stack spacing={3} mt={3}>
+              {priceRanges.map((range, index) => {
+                const count = products.filter(
+                  (product) =>
+                    product.price >= range.range[0] &&
+                    product.price <= range.range[1]
+                ).length;
+                return (
+                  <Checkbox
+                    key={index}
+                    isChecked={
+                      priceRange[0] === range.range[0] &&
+                      priceRange[1] === range.range[1]
+                    }
+                    onChange={() => handleCheckboxChange(range.range)}
+                  >
+                    {range.label}
+                    <Badge ml={2} colorScheme={count ? "green" : "gray"}>
+                      {count}
+                    </Badge>
+                  </Checkbox>
+                );
+              })}
+            </Stack>
+          </FormControl>
           {/* Brand Filter */}
-          <Heading as="h6" fontSize="lg" mb={3} textTransform="uppercase">
-            <Box as="span" color="blue.600">
-              Filter by brand
-            </Box>
+          <Heading as="h6" fontSize="lg" mt={6} mb={3} textTransform="uppercase" color={headingColor}>
+            Filter by brand
           </Heading>
-          <Box bg="gray.50" p={4} borderRadius="md" mb={6}>
-            <FormControl as="form">
-              <Stack spacing={3} mt={3}>
-                <Checkbox isChecked={selectedBrands.includes("all")} onChange={() => handleBrandChange("all")}>
-                  All
-                </Checkbox>
-                <Checkbox isChecked={selectedBrands.includes("cisco")} onChange={() => handleBrandChange("cisco")}>
-                  Cisco
-                </Checkbox>
-                <Checkbox isChecked={selectedBrands.includes("fanvil")} onChange={() => handleBrandChange("fanvil")}>
-                  Fanvil
-                </Checkbox>
-                <Checkbox isChecked={selectedBrands.includes("grandstream")} onChange={() => handleBrandChange("grandstream")}>
-                  Grandstream
-                </Checkbox>
-                <Checkbox isChecked={selectedBrands.includes("yealink")} onChange={() => handleBrandChange("yealink")}>
-                  Yealink
-                </Checkbox>
-              </Stack>
-            </FormControl>
-          </Box>
+          <FormControl as="form">
+            <Stack spacing={3} mt={3}>
+              {["all", "cisco", "fanvil", "grandstream", "yealink"].map(
+                (brand, index) => (
+                  <Checkbox
+                    key={index}
+                    isChecked={selectedBrands.includes(brand)}
+                    onChange={() => handleBrandChange(brand)}
+                  >
+                    {brand.charAt(0).toUpperCase() + brand.slice(1)}
+                    <Icon as={CheckCircleIcon} ml={2} color="green.400" />
+                  </Checkbox>
+                )
+              )}
+            </Stack>
+          </FormControl>
         </Box>
         {/* Shop Sidebar End */}
 
         {/* Shop Product Start */}
         <Box flex="1">
-          <FanvilProducts priceRange={priceRange} products={filteredProducts} />
+          {loading ? (
+            <Spinner size="xl" color="blue.500" />
+          ) : (
+            <FanvilProducts priceRange={priceRange} products={filteredProducts} />
+          )}
         </Box>
         {/* Shop Product End */}
       </Flex>
