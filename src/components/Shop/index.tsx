@@ -100,7 +100,7 @@ export const Shop: React.FC = () => {
         {/* Shop Sidebar Start */}
         <Box w={{ base: "100%", md: "30%", lg: "25%" }} boxShadow="md" bg={sidebarBg} borderRadius="md" p={5}>
           {/* Price Filter */}
-          <Heading as="h6" fontSize="lg" mb={3} textTransform="uppercase" color={headingColor}>
+          <Heading as="h6" fontSize="lg" mb={3} className="blutext" textTransform="uppercase" color={headingColor}>
             Filter by price
           </Heading>
           <FormControl as="form">
@@ -139,7 +139,7 @@ export const Shop: React.FC = () => {
             </Stack>
           </FormControl>
           {/* Brand Filter */}
-          <Heading as="h6" fontSize="lg" mt={6} mb={3} textTransform="uppercase" color={headingColor}>
+          <Heading as="h6" fontSize="lg" mt={6} mb={3} className="blutext" textTransform="uppercase" color={headingColor}>
             Filter by brand
           </Heading>
           <FormControl as="form">
