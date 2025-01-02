@@ -153,7 +153,7 @@ export const Yealink: React.FC = () => {
                     onChange={() => handleBrandChange(brand)}
                   >
                     {brand.charAt(0).toUpperCase() + brand.slice(1)}
-                    <Icon as={CheckCircleIcon} ml={2} color="green.400" />
+                    <Icon as={CheckCircleIcon} ml={2} color="gray" />
                   </Checkbox>
                 )
               )}

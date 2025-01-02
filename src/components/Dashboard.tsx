@@ -48,9 +48,9 @@ interface FlashMessage {
   message: string;
 }
 
-
 export const Dashboard: React.FC = () => {
   const { user, handleLogout } = useContext(UserContext);
+  const [flashMessage, setFlashMessage] = useState<FlashMessage | null>(null); // Fix applied here
   const [userIP, setUserIP] = useState<string | null>(null);
   const guestID = useRef<string>(uuidv4());
   const { addToCart } = useCart();
@@ -59,6 +59,34 @@ export const Dashboard: React.FC = () => {
   const [productSuggestions, setProductSuggestions] = useState<Product[]>([]);
   const [purchasedItems, setPurchasedItems] = useState<Product[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [userDetails, setUserDetails] = useState({
+    id: "",
+    firstName: "",
+    lastName: "",
+    userEmail: "",
+    address: "",
+    phone: "",
+  });
+  const [contacts, setContacts] = useState([]);
+
+  useEffect(() => {
+    if (!user) {
+      setFlashMessage({
+        type: "error",
+        message: "You need to login first!",
+      });
+      window.location.href = "/login";
+    } else {
+      setUserDetails({
+        id: user._id || "",
+        firstName: user.firstName || "",
+        lastName: user.lastName || "",
+        userEmail: user.email || "",
+        address: user.address || "",
+        phone: user.phone || "",
+      });
+    }
+  }, [user]);
 
   const gridColumns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
 
