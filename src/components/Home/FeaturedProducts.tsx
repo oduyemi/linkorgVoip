@@ -54,7 +54,7 @@ export const FeaturedProducts: React.FC = () => {
     fetchIP();
   }, []);
 
-// FETCH PRODUCTS
+  // FETCH PRODUCTS
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -94,7 +94,7 @@ export const FeaturedProducts: React.FC = () => {
       img: product.img,
       quantity: 1,
     };
-  
+
     try {
       if (user?.token) {
         // User is logged in
@@ -107,7 +107,7 @@ export const FeaturedProducts: React.FC = () => {
           },
           { headers: { Authorization: `Bearer ${user.token}` } }
         );
-  
+
         if (response.status === 200) {
           toast({
             title: "Success!",
@@ -125,13 +125,13 @@ export const FeaturedProducts: React.FC = () => {
         const existingIndex = currentCart.findIndex(
           (item: Product) => item._id === product._id
         );
-  
+
         if (existingIndex > -1) {
           currentCart[existingIndex].quantity += 1;
         } else {
           currentCart.push(cartProduct);
         }
-  
+
         localStorage.setItem(cartKey, JSON.stringify(currentCart));
         toast({
           title: "Added to Cart",
@@ -141,7 +141,7 @@ export const FeaturedProducts: React.FC = () => {
           isClosable: true,
         });
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.error("Error adding to cart:", error);
       toast({
         title: "Error",
@@ -152,7 +152,7 @@ export const FeaturedProducts: React.FC = () => {
       });
     }
   };
-  
+
   if (loading) {
     return (
       <Container maxW="container.xl" py={10}>
@@ -186,7 +186,7 @@ export const FeaturedProducts: React.FC = () => {
 
   return (
     <Container maxW="container.xl" py={10}>
-      <Heading as="h2" fontSize="2xl" className="blutext" textAlign="center" mb={6}>
+      <Heading as="h2" fontSize="2xl" className="blutext" textAlign="center" mb={6} color="teal.500">
         Featured Products
       </Heading>
       <Grid
@@ -199,16 +199,37 @@ export const FeaturedProducts: React.FC = () => {
         gap={6}
       >
         {products.map((product) => (
-          <Box key={product._id} bg="gray.50" p={5} shadow="md" borderWidth="1px" borderRadius="lg">
-            <Box position="relative" overflow="hidden">
-              <Image src={product.img} alt={product.title} borderRadius="sm" />
+          <Box
+            key={product._id}
+            bg="white"
+            borderRadius="lg"
+            boxShadow="md"
+            p={5}
+            transition="all 0.3s ease-in-out"
+            _hover={{
+              transform: "scale(1.05)",
+              boxShadow: "lg",
+            }}
+          >
+            <Box position="relative" overflow="hidden" borderRadius="lg">
+              <Image
+                src={product.img}
+                alt={product.title}
+                width="100%"
+                height="200px"
+                objectFit="contain"
+                className="img-responsive mb-3"
+                borderRadius="md"
+                transition="transform 0.3s ease"
+                _hover={{ transform: "scale(1.1)" }}
+              />
               <Flex mt={2} justify="center">
                 <IconButton
                   aria-label="Add to cart"
                   onClick={() => handleAddToCart(product)}
                   icon={<FaShoppingCart />}
                   variant="outline"
-                  colorScheme="gray"
+                  colorScheme="teal"
                   size="sm"
                 />
                 <IconButton
@@ -230,11 +251,11 @@ export const FeaturedProducts: React.FC = () => {
               </Flex>
             </Box>
             <Stack mt={4} spacing={2} align="center">
-              <Text fontWeight="semibold" noOfLines={1}>
+              <Text fontWeight="semibold" fontSize="lg" className="blutext" noOfLines={1}>
                 {product.description}
               </Text>
-              <Text fontSize="lg" fontWeight="bold">
-              &#163;{product.price.toFixed(2)}
+              <Text fontSize="xl" fontWeight="bold" color="gray">
+                &#163;{product.price.toFixed(2)}
               </Text>
             </Stack>
           </Box>
