@@ -117,39 +117,58 @@ export const Banner: React.FC = () => {
         </Box>
 
         {/* Offer Section */}
-        <Box className="col-lg-4">
-          {[yealinkW76P, yealinkT48U].map((offerImg, index) => (
-            <MotionBox
-              key={index}
-              mb={6}
-              position="relative"
-              height="200px"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: index * 0.3 } as any} 
+      <Box className="col-lg-4">
+        {[yealinkW76P, yealinkT48U].map((offerImg, index) => (
+          <MotionBox
+            key={index}
+            mb={6}
+            position="relative"
+            height="200px"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: index * 0.3 } as any}
+          >
+            <Image src={offerImg} alt={`Offer ${index + 1}`} width="65%" height="100%" objectFit="cover" />
+            <Flex
+              position="absolute"
+              top={0}
+              left={0}
+              right={0}
+              bottom={0}
+              flexDirection="column"
+              alignItems="center"
+              justifyContent="center"
+              backgroundColor="rgba(0, 0, 0, 0.5)"
+              p={4}
             >
-              <Image src={offerImg} alt={`Offer ${index + 1}`} width="65%" height="100%" objectFit="cover" />
-              <Flex
-                position="absolute"
-                top={0}
-                left={0}
-                right={0}
-                bottom={0}
-                flexDirection="column"
-                alignItems="center"
-                justifyContent="center"
-                backgroundColor="rgba(0, 0, 0, 0.5)"
-                p={4}
-              >
-                <Text fontSize="sm" color="white" textTransform="uppercase">Get a Virtual Phone Number Now</Text>
-                <Heading as="h3" size="lg" color="white" mb={3}>Take Your Business Worldwide in Minutes. Get a Cloud-Based Phone Number Set Up Today.
-                </Heading>
-                <Link href="/shop"><Button colorScheme="orange">Buy Now</Button></Link>
-              </Flex>
-            </MotionBox>
-          ))}
-        </Box>
-      </Flex>
-    </Box>
+              {index === 0 ? (
+                <>
+                  <Text fontSize="sm" color="white" textTransform="uppercase">Get a Virtual Phone Number</Text>
+                  <Heading as="h3" size="lg" color="white" mb={3}>
+                    {/* Take Your Business Worldwide in Minutes.  */}
+                    Get a Cloud-Based Phone Number Set Up Today.
+                  </Heading>
+                  <Link href="/shop">
+                    <Button colorScheme="orange">Buy Now</Button>
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Text fontSize="sm" color="white" textTransform="uppercase">40 Days Free VoIP</Text>
+                  <Heading as="h3" size="lg" color="white" mb={3}>
+                    Special Offers
+                  </Heading>
+                  <Link href="/shop">
+                    <Button colorScheme="orange">Shop Now</Button>
+                  </Link>
+                </>
+              )}
+            </Flex>
+          </MotionBox>
+        ))}
+      </Box>
+    </Flex>
+  </Box>
+
   );
 };
