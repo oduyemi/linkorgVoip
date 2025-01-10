@@ -141,9 +141,10 @@ export const Banner: React.FC = () => {
                 backgroundColor="rgba(0, 0, 0, 0.5)"
                 p={4}
               >
-                <Text fontSize="sm" color="white" textTransform="uppercase">Save 20%</Text>
-                <Heading as="h3" size="lg" color="white" mb={3}>Special Offer</Heading>
-                <Link href="/shop"><Button colorScheme="orange">Shop Now</Button></Link>
+                <Text fontSize="sm" color="white" textTransform="uppercase">Get a Virtual Phone Number Now</Text>
+                <Heading as="h3" size="lg" color="white" mb={3}>Take Your Business Worldwide in Minutes. Get a Cloud-Based Phone Number Set Up Today.
+                </Heading>
+                <Link href="/shop"><Button colorScheme="orange">Buy Now</Button></Link>
               </Flex>
             </MotionBox>
           ))}
